@@ -1,6 +1,6 @@
 // Базовый конфиг Biome для TS/JS-проектов pavelsiba. Стиль — общий для всех эталонов
 // (yd-mcp, more-shop, autopartsAI); правила сверх recommended — встроенные аналоги sonarjs
-// (таблица соответствия — D:/Obsidian/pavelsiba-skills/quality-gates/sonarjs-biome.md).
+// (таблица соответствия — sonarjs-biome.md в скилле quality-gates набора pavelsiba-skills).
 // warn — правила из nursery и пороговые: поведение или порог ещё уточняются.
 {
   "vcs": {
