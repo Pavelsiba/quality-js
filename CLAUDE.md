@@ -10,6 +10,11 @@ markdownlint) для TS/JS-проектов pavelsiba. Кода, кроме `com
 проекты скилл `quality-gates` из pavelsiba-skills (таблица sonarjs → Biome —
 `D:/Obsidian/pavelsiba-skills/quality-gates/sonarjs-biome.md`).
 
+## Заметки проекта
+
+Хранилище Obsidian — `D:/Obsidian/quality-js/`: журнал разработки — `devlog/ГГГГ-ММ-ДД.md`, один
+файл на день; ретро — `retro/`. План и решения по составу стандарта — `D:/Obsidian/pavelsiba-skills/quality-gates/package.md`.
+
 ## Команды
 
 ```bash
