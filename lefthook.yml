@@ -1,0 +1,28 @@
+# Пакет навязывает quality gates проектам и сам живёт по ним.
+colors: false
+output:
+  - summary
+  - failure
+  - execution_out
+
+pre-commit:
+  parallel: true
+  jobs:
+    - name: biome
+      glob: "*.{js,ts,tsx,json,jsonc,md}"
+      run: npx biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+      stage_fixed: true
+
+    - name: markdown
+      glob: "{*.md,.markdownlint-cli2.jsonc,markdownlint/*}"
+      run: npm run lint:md
+
+    # Тесты подключают конфиги как проект-потребитель: правка конфига без них не проверена.
+    - name: test
+      glob: "{configs/**,biome-manifest.json,package.json,test/**}"
+      run: npm test
+
+commit-msg:
+  jobs:
+    - name: commitlint
+      run: npx commitlint --edit {1} --config commitlint/index.js

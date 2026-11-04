@@ -1,0 +1,6 @@
+// Репозиторий проверяет свой Markdown тем же конфигом, что отдаёт проектам.
+{
+  "config": { "extends": "./markdownlint/.markdownlint.jsonc" },
+  "globs": ["**/*.md"],
+  "ignores": ["node_modules/**"]
+}

@@ -1,0 +1,16 @@
+// React поверх base: правила хуков и необъявленных переменных (из granch).
+{
+  "linter": {
+    "rules": {
+      "correctness": {
+        "noUndeclaredVariables": "error",
+        "noUnusedImports": { "level": "error", "fix": "safe" },
+        "useExhaustiveDependencies": "warn",
+        "useHookAtTopLevel": "error"
+      },
+      "suspicious": {
+        "noUnknownAtRules": "error"
+      }
+    }
+  }
+}

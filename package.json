@@ -1,0 +1,63 @@
+{
+  "name": "@pavelsiba/quality-js",
+  "version": "0.1.0",
+  "description": "Общие конфиги quality gates для TS/JS-проектов: Biome, tsconfig, commitlint, markdownlint.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pavelsiba/quality-js.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "files": [
+    "biome-manifest.json",
+    "configs",
+    "tsconfig",
+    "commitlint",
+    "markdownlint"
+  ],
+  "exports": {
+    ".": {
+      "biome": "./biome-manifest.json"
+    },
+    "./tsconfig/*": "./tsconfig/*",
+    "./commitlint": "./commitlint/index.js",
+    "./markdownlint": "./markdownlint/.markdownlint.jsonc",
+    "./package.json": "./package.json"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "peerDependencies": {
+    "@biomejs/biome": ">=2.6.0",
+    "@commitlint/config-conventional": ">=20.0.0",
+    "markdownlint-cli2": ">=0.20.0"
+  },
+  "peerDependenciesMeta": {
+    "@biomejs/biome": {
+      "optional": true
+    },
+    "@commitlint/config-conventional": {
+      "optional": true
+    },
+    "markdownlint-cli2": {
+      "optional": true
+    }
+  },
+  "scripts": {
+    "lint": "biome check",
+    "lint:md": "markdownlint-cli2",
+    "test": "node --test \"test/*.test.js\"",
+    "prepare": "lefthook install"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.6.4",
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
+    "@commitlint/types": "^21.2.3",
+    "lefthook": "^2.2.2",
+    "markdownlint-cli2": "^0.24.0"
+  }
+}

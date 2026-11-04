@@ -1,0 +1,160 @@
+// Базовый конфиг Biome для TS/JS-проектов pavelsiba. Стиль — общий для всех эталонов
+// (yd-mcp, more-shop, autopartsAI); правила сверх recommended — встроенные аналоги sonarjs
+// (таблица соответствия — D:/Obsidian/pavelsiba-skills/quality-gates/sonarjs-biome.md).
+// warn — правила из nursery и пороговые: поведение или порог ещё уточняются.
+{
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 120,
+    "lineEnding": "lf"
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double",
+      "jsxQuoteStyle": "double",
+      "semicolons": "asNeeded",
+      "trailingCommas": "none",
+      "arrowParentheses": "always"
+    }
+  },
+  "json": {
+    "formatter": {
+      "trailingCommas": "none"
+    }
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "preset": "recommended",
+      "complexity": {
+        "noAdjacentSpacesInRegex": "error",
+        "noArguments": "error",
+        "noExcessiveCognitiveComplexity": {
+          "level": "error",
+          "options": {
+            "maxAllowedComplexity": 15
+          }
+        },
+        "noExcessiveLinesPerFunction": {
+          "level": "error",
+          "options": {
+            "maxLines": 80
+          }
+        },
+        "noExcessiveNestedCallbacks": "warn",
+        "noExtraBooleanCast": "error",
+        "noUselessCatch": "error",
+        "noUselessContinue": "error",
+        "noUselessReturn": "error",
+        "noUselessTernary": "error",
+        "noUselessUndefinedInitialization": "error",
+        "useWhile": "error"
+      },
+      "correctness": {
+        "noConstAssign": "error",
+        "noConstantCondition": "error",
+        "noEmptyCharacterClassInRegex": "error",
+        "noInnerDeclarations": "error",
+        "noSelfAssign": "error",
+        "noUndeclaredDependencies": "error",
+        "noUndeclaredVariables": "error",
+        "noUnusedFunctionParameters": "error",
+        "noUnusedImports": "error",
+        "noUnusedInstantiation": "error",
+        "noUnusedVariables": "error",
+        "useValidForDirection": "error",
+        "useYield": "error"
+      },
+      "nursery": {
+        "noFloatingPromises": "warn",
+        "noImpliedEval": "warn",
+        "noNestedSwitch": "warn",
+        "noNestedTemplateLiterals": "warn",
+        "noThisOutsideOfClass": "warn",
+        "useRegexpExec": "warn",
+        "useSimplifiedBooleanReturn": "warn",
+        "useValidTestTitle": "warn"
+      },
+      "security": {
+        "noGlobalEval": "error"
+      },
+      "style": {
+        "noCommonJs": "error",
+        "noNestedTernary": "error",
+        "noParameterAssign": "error",
+        "useArrayLiterals": "error",
+        "useCollapsedIf": "error",
+        "useConsistentTypeDefinitions": {
+          "level": "error",
+          "options": {
+            "style": "type"
+          }
+        },
+        "useNodejsImportProtocol": "error",
+        "useTestHooksOnTop": "error",
+        "useUnicodeRegex": "error"
+      },
+      "suspicious": {
+        "noAssignInExpressions": "error",
+        "noConfusingLabels": "error",
+        "noControlCharactersInRegex": "error",
+        "noDuplicateCase": "error",
+        "noDuplicateElseIf": "error",
+        "noEmptyBlockStatements": "error",
+        "noExplicitAny": "error",
+        "noFallthroughSwitchClause": "error",
+        "noFocusedTests": "error",
+        "noForIn": "error",
+        "noGlobalAssign": "error",
+        "noIdenticalTestTitle": "error",
+        "noLoopFunc": "error",
+        "noMisleadingCharacterClass": "error",
+        "noSelfCompare": "error",
+        "noShadowRestrictedNames": "error",
+        "noSkippedTests": "error",
+        "noVar": "error",
+        "useArraySortCompare": "error",
+        "useDefaultSwitchClauseLast": "error",
+        "useGuardForIn": "error",
+        "useIterableCallbackReturn": "error"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.d.ts"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnusedVariables": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.test.*", "**/*.spec.*"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveLinesPerFunction": "off"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+{
+  "version": 1,
+  "configs": [{ "base": "./configs/biome/base.jsonc" }, { "react": "./configs/biome/react.jsonc" }]
+}
