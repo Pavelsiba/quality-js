@@ -87,8 +87,7 @@
         "noNestedTemplateLiterals": "warn",
         "noThisOutsideOfClass": "warn",
         "useRegexpExec": "warn",
-        "useSimplifiedBooleanReturn": "warn",
-        "useValidTestTitle": "warn"
+        "useSimplifiedBooleanReturn": "warn"
       },
       "security": {
         "noGlobalEval": "error"
