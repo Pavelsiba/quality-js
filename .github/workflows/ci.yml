@@ -41,6 +41,9 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
+      # Trusted Publishing: npm меняет OIDC-токен прогона на разовый токен публикации — секрета
+      # NPM_TOKEN нет. Доверенный издатель задан на npmjs.com: Pavelsiba / quality-js / ci.yml.
+      id-token: write
     concurrency:
       group: release
       cancel-in-progress: false
@@ -64,6 +67,7 @@ jobs:
         env:
           LEFTHOOK: "0"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Granular-токен npmjs с правом публикации @pavelsiba/*: секрет репозитория.
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # Репозиторий приватный, а provenance npm для приватных не выпускает: без этого
+          # Trusted Publishing включил бы его сам, и публикация бы упала (предположение).
+          NPM_CONFIG_PROVENANCE: "false"
         run: npx semantic-release
