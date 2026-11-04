@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.1](https://github.com/Pavelsiba/quality-js/compare/v1.0.0...v1.0.1) (2026-11-04)
+
+### Исправления
+
+* **release:** пакет публикуется на npmjs.org, у commitlint есть типы ([46a7fc0](https://github.com/Pavelsiba/quality-js/commit/46a7fc0b157a8f22931c263cf70eafc8f6936344))
+
 ## 1.0.0 (2026-11-04)
 
 ### Новое
