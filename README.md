@@ -5,19 +5,7 @@
 
 ## Установка
 
-Пакет лежит в GitHub Packages. Один раз — реестр для scope:
-
-```ini
-# ~/.npmrc (npm) — токен с правом read:packages
-@pavelsiba:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-```
-
-```toml
-# bunfig.toml (bun)
-[install.scopes]
-pavelsiba = { url = "https://npm.pkg.github.com", token = "$GITHUB_TOKEN" }
-```
+Пакет публичный, на npmjs.org: ставится без токенов — в CI, Docker, у dependabot и в форках.
 
 ```bash
 npm i -D @pavelsiba/quality-js @biomejs/biome

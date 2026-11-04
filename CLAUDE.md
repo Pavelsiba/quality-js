@@ -45,7 +45,7 @@ commit-msg — commitlint из `commitlint/index.js`.
 - Новое правило в минорной версии — уровнем `info` (не `warn`: проекты гоняют линтер с
   `--error-on-warnings`); `error` — только в мажорной. `warn` в `base.jsonc` оставлен для nursery и
   пороговых правил.
-- Версию, `CHANGELOG.md`, тег `vX.Y.Z` и публикацию в GitHub Packages делает semantic-release в CI
+- Версию, `CHANGELOG.md`, тег `vX.Y.Z` и публикацию на npmjs.org делает semantic-release в CI
   на пуше в `main` (`.releaserc.json`). `version` в `package.json` и теги руками не трогать; тип
   коммита определяет бамп: `feat` — минор, `fix` — патч, `feat!` / `BREAKING CHANGE` — мажор.
 - Коммиты — Conventional Commits, описание обязательно по-русски (правило `subject-russian`).

@@ -30,7 +30,7 @@ jobs:
       - run: npm test
 
   # Релиз — после зелёных проверок на main: semantic-release по conventional commits ставит версию в
-  # package.json, пишет CHANGELOG.md, тег vX.Y.Z и публикует пакет в GitHub Packages.
+  # package.json, пишет CHANGELOG.md, тег vX.Y.Z и публикует пакет на npmjs.org.
   # Руками version и теги не трогать: мажорная версия — только от feat! / BREAKING CHANGE.
   release:
     name: Release
@@ -41,7 +41,6 @@ jobs:
       contents: write
       issues: write
       pull-requests: write
-      packages: write
     concurrency:
       group: release
       cancel-in-progress: false
@@ -65,5 +64,6 @@ jobs:
         env:
           LEFTHOOK: "0"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Granular-токен npmjs с правом публикации @pavelsiba/*: секрет репозитория.
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release

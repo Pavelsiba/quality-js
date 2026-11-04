@@ -2,14 +2,14 @@
   "name": "@pavelsiba/quality-js",
   "version": "1.0.0",
   "description": "Общие конфиги quality gates для TS/JS-проектов: Biome, tsconfig, commitlint, markdownlint.",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Pavelsiba/quality-js.git"
   },
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "access": "public"
   },
   "files": [
     "biome-manifest.json",
@@ -23,7 +23,10 @@
       "biome": "./biome-manifest.json"
     },
     "./tsconfig/*": "./tsconfig/*",
-    "./commitlint": "./commitlint/index.js",
+    "./commitlint": {
+      "types": "./commitlint/index.d.ts",
+      "default": "./commitlint/index.js"
+    },
     "./markdownlint": "./markdownlint/.markdownlint.jsonc",
     "./package.json": "./package.json"
   },
