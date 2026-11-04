@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.2](https://github.com/Pavelsiba/quality-js/compare/v1.0.1...v1.0.2) (2026-11-04)
+
+### Исправления
+
+* **biome:** отключено useValidTestTitle — ложно срабатывает на локальную функцию describe() ([20c5c02](https://github.com/Pavelsiba/quality-js/commit/20c5c02bafa6a085713240253994e3e5e2b7be12))
+
 ## [1.0.1](https://github.com/Pavelsiba/quality-js/compare/v1.0.0...v1.0.1) (2026-11-04)
 
 ### Исправления
