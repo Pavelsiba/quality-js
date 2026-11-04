@@ -3,7 +3,6 @@ name: CI
 on:
   push:
     branches: [main]
-    tags: ["v*"]
   pull_request:
 
 permissions:
@@ -30,32 +29,41 @@ jobs:
       - run: npm run lint:md
       - run: npm test
 
-  # Публикация — по тегу vX.Y.Z, после зелёных проверок. Версия тега обязана совпасть с
-  # package.json: иначе в реестр уедет не та версия, которую обещает тег.
-  publish:
-    name: Publish
+  # Релиз — после зелёных проверок на main: semantic-release по conventional commits ставит версию в
+  # package.json, пишет CHANGELOG.md, тег vX.Y.Z и публикует пакет в GitHub Packages.
+  # Руками version и теги не трогать: мажорная версия — только от feat! / BREAKING CHANGE.
+  release:
+    name: Release
     needs: check
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
+      issues: write
+      pull-requests: write
       packages: write
+    concurrency:
+      group: release
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          fetch-depth: 0
           persist-credentials: false
 
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
-          registry-url: https://npm.pkg.github.com
-          scope: "@pavelsiba"
+          cache: npm
 
-      - name: Версия тега = версия пакета
+      - run: npm ci
         env:
-          TAG: ${{ github.ref_name }}
-        run: test "${TAG#v}" = "$(node -p 'require("./package.json").version')"
+          LEFTHOOK: "0"
 
-      - run: npm publish
+      # LEFTHOOK=0: релизный коммит «chore(release): X.Y.Z» не по-русски, commitlint его бы отверг.
+      - name: Release
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LEFTHOOK: "0"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release

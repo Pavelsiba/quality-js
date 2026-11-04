@@ -39,4 +39,6 @@ npm i -D @pavelsiba/quality-js @biomejs/biome
 Новое правило приходит в минорной версии, не блокируя коммиты и CI: в Biome — уровнем `info`, в
 ESLint — подключаемым набором `next`. Уровнем `error` — только в мажорной. `warn` для этого не
 годится: проекты гоняют линтер с `--error-on-warnings` / `--max-warnings 0`.
-Публикация — тегом `vX.Y.Z`, совпадающим с версией в `package.json`.
+Версию, `CHANGELOG.md`, тег `vX.Y.Z` и публикацию делает semantic-release в CI на пуше в `main`
+по conventional commits: `feat` — минорная, `fix` — патч, `feat!` / `BREAKING CHANGE` — мажорная.
+Новые правила и их уровень — в `CHANGELOG.md`.

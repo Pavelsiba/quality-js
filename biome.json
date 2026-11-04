@@ -2,6 +2,6 @@
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "extends": ["./configs/biome/base.jsonc"],
   "files": {
-    "includes": ["**", "!test/fixtures"]
+    "includes": ["**", "!test/fixtures", "!CHANGELOG.md"]
   }
 }
