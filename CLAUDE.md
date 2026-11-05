@@ -12,8 +12,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Заметки проекта
 
-Хранилище Obsidian — `D:/Obsidian/quality-js/`: журнал разработки — `devlog/ГГГГ-ММ-ДД.md`, один
-файл на день; ретро — `retro/`. План и решения по составу стандарта — `D:/Obsidian/pavelsiba-skills/quality-gates/package.md`.
+Хранилище Obsidian — `D:/Obsidian/quality-js/`: **роадмап — `roadmap.md`** (что осталось; на вопрос
+о задачах читать его, в конце сессии обновлять: сделанное вычеркнуть, новое и решения добавить),
+журнал разработки — `devlog/ГГГГ-ММ-ДД.md`, один файл на день; ретро — `retro/`. План и решения по составу стандарта — `D:/Obsidian/pavelsiba-skills/quality-gates/package.md`.
 
 ## Команды
 
