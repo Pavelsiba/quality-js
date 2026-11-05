@@ -34,7 +34,10 @@ markdownlint (только в хуке: ни в зависимостях, ни �
 - **Все конфиги лежат в `configs/`** (`biome/`, `tsconfig/`, `commitlint/`), а публичные пути проектов
   задают `exports` и манифест: `@pavelsiba/quality-js/tsconfig/node.json`, `…/commitlint`,
   `…/configs/base`. Переезд файла внутри `configs/` не ломает потребителей, пока `exports` отдаёт
-  прежние имена.
+  прежние имена. Исключение — `biome-manifest.json`: он лежит в корне пакета, потому что Biome
+  ищет манифест только там и только под этим именем (`biome-manifest.json` или `.jsonc`), а
+  `exports["."].biome` на него лишь указывает. Перенос в `configs/` пробовали 2026-11-05: тесты 0 из 3,
+  ошибка `Package … must provide biome-manifest.json`.
 - **Biome-конфиги подключаются через манифест.** `package.json` → `exports["."].biome` указывает на
   `biome-manifest.json`, который отображает имена `base` / `react` на файлы в `configs/biome/`.
   Поэтому проект пишет `"extends": ["@pavelsiba/quality-js/configs/base"]`. Новый Biome-конфиг —
