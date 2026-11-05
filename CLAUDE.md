@@ -92,6 +92,21 @@ markdownlint (только в хуке: ни в зависимостях, ни �
   - Политики и категории взяты с more-shop и autopartsAI, прогон `fsd()` по копиям их `src` даёт 0
     нарушений (more-shop без `clientFiles`: их `*-queries.ts` законно импортируют серверные функции
     из `@/server`; autopartsAI с `clientFiles` и `serverLayers`).
+- **`release`** (`configs/release/index.js`, экспорт `…/release`): конфиг semantic-release — по умолчанию
+  экспорт и именованная фабрика `release({ npmPublish, assets })`. Репозиторий сам берёт его в
+  `.releaserc.json` через `extends: "./configs/release/index.js"`. Плагины шареного конфига
+  semantic-release ищет от папки конфига, поэтому они и пресет — необязательные peer-зависимости
+  (в проекте они стоят рядом с `semantic-release`). `test/release.test.js` проверяет экспорт, форму и
+  разрешение плагинов без сети: настоящий `semantic-release --dry-run` требует токен GitHub (проба
+  2026-11-05 дошла до `verifyConditions` у `@semantic-release/github` и упала на фиктивном токене).
+- **Переиспользуемый workflow** `.github/workflows/security.yml` (`workflow_call`, вход `audit`): gitleaks,
+  actionlint + zizmor, `npm audit --omit=dev`; сканеры запускаются напрямую, скрипты проекта не нужны.
+  Не входит в `files` пакета: проект зовёт его `uses: Pavelsiba/quality-js/.github/workflows/security.yml@<sha>`.
+  Сам репозиторий зовёт тот же файл через `./.github/workflows/security.yml` в `ci.yml`, и релиз ждёт
+  его (`needs: [check, security]`). Версии сканеров и sha256 — в `env` файла; обновлять вместе с
+  локальными (winget), иначе находки расходятся. Публичный проект (yd-mcp) не вызвал бы
+  его из приватного `quality-js` — это предположение по документации GitHub, не проверено; поэтому
+  репозиторий публичный (сменено 2026-11-05).
 - **tsconfig:** `base.json` — строгие флаги и `noEmit`; `node.json` (NodeNext) и `bundler.json`
   (bundler, DOM, react-jsx) расширяют его.
 

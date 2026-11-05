@@ -1,0 +1,96 @@
+# Переиспользуемый workflow безопасности: секреты в истории, корректность и безопасность workflow,
+# аудит зависимостей. Проект зовёт его одной джобой:
+#   security:
+#     uses: Pavelsiba/quality-js/.github/workflows/security.yml@<sha> # vX.Y.Z
+# Скрипты проекта не нужны: сканеры запускаются напрямую, кроме аудита, которому нужен lockfile проекта.
+name: Security
+
+on:
+  workflow_call:
+    inputs:
+      audit:
+        description: Аудит production-зависимостей через npm. false — проект не на npm (bun, pnpm) или без зависимостей.
+        type: boolean
+        default: true
+
+# Только чтение: ни пуша, ни комментариев. Вызывающая джоба может сузить права, расширить не может.
+permissions:
+  contents: read
+
+# Версии сканеров закреплены и сверяются по sha256 ассета релиза: latest менял бы вердикт CI без единой
+# правки в репозитории. Локально ставятся те же версии, иначе находки расходятся.
+env:
+  GITLEAKS_VERSION: 8.30.1
+  GITLEAKS_SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
+  ACTIONLINT_VERSION: 1.7.12
+  ACTIONLINT_SHA256: 8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8
+  ZIZMOR_VERSION: 1.31.1
+  ZIZMOR_SHA256: d185f726bdaf92df78273217dfdd24ebcd6b0ef48cf3ce776ff5762b6e138c99
+
+jobs:
+  # Вся история, а не только diff PR: секрет, удалённый следующим коммитом, из истории никуда не делся.
+  # --redact обязателен: без него находка печатается в лог целиком.
+  secrets:
+    name: Secrets
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install gitleaks
+        run: |
+          curl -fsSL -o gitleaks.tar.gz \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          echo "${GITLEAKS_SHA256}  gitleaks.tar.gz" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/bin"
+          tar xzf gitleaks.tar.gz -C "$RUNNER_TEMP/bin" gitleaks
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+
+      - name: Gitleaks
+        run: gitleaks git --redact --verbose --no-banner
+
+  # Корректность (actionlint, shellcheck по run: есть в образе ubuntu) и безопасность (zizmor) workflow.
+  workflows:
+    name: Workflows
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install actionlint and zizmor
+        run: |
+          curl -fsSL -o actionlint.tar.gz \
+            "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz"
+          echo "${ACTIONLINT_SHA256}  actionlint.tar.gz" | sha256sum --check
+          curl -fsSL -o zizmor.tar.gz \
+            "https://github.com/zizmorcore/zizmor/releases/download/v${ZIZMOR_VERSION}/zizmor-x86_64-unknown-linux-gnu.tar.gz"
+          echo "${ZIZMOR_SHA256}  zizmor.tar.gz" | sha256sum --check
+          mkdir -p "$RUNNER_TEMP/bin"
+          tar xzf actionlint.tar.gz -C "$RUNNER_TEMP/bin" actionlint
+          tar xzf zizmor.tar.gz -C "$RUNNER_TEMP/bin" zizmor
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+
+      # Токен включает онлайн-аудиты zizmor: подменённые коммиты в закреплённых sha и экшены с
+      # известными уязвимостями. Без него они пропускаются.
+      - name: Lint workflows
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: actionlint && zizmor --no-progress .github
+
+  # Уязвимости в зависимостях, которые уезжают в пакет. Dev-зависимости обновляет Dependabot. Красный без
+  # правок в репозитории — штатно: advisory вышел, зависимость надо поднять. Без cache и без npm ci:
+  # аудиту хватает lockfile.
+  audit:
+    name: Audit
+    if: inputs.audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Audit
+        run: npm audit --omit=dev

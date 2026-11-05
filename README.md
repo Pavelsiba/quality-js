@@ -23,15 +23,17 @@
 Части независимы: подключайте только нужные. Пакет ничего не ставит сам, все инструменты — опциональные
 peer-зависимости, их проект ставит рядом (см. «Установка»).
 
-| Часть       | Подключение                                                                          | Что даёт                                                                               |
-| ----------- | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| Biome       | `biome.json`: `"extends": ["@pavelsiba/quality-js/configs/base"]`                    | Формат, линтер, сортировка импортов, встроенные аналоги sonarjs и плагины безопасности |
-| Biome React | `… "@pavelsiba/quality-js/configs/react"` — после `base`                             | Правила хуков React                                                                    |
-| TypeScript  | `tsconfig.json`: `"extends": "@pavelsiba/quality-js/tsconfig/node.json"`             | Строгая проверка типов для Node: NodeNext, ES2023                                      |
-| TypeScript  | `… "@pavelsiba/quality-js/tsconfig/bundler.json"`                                    | То же для фронтенда: bundler, DOM, react-jsx                                           |
-| commitlint  | `commitlint.config.js`: `export { default } from "@pavelsiba/quality-js/commitlint"` | Conventional Commits, описание коммита по-русски                                       |
-| ESLint      | `eslint.config.js`: `[...base(), ...react(), ...sonar(), ...fsd()]` из `…/eslint`    | Для проектов на ESLint: стиль, хуки React, sonarjs, границы слоёв FSD                  |
-| steiger     | `steiger.config.js`: `export { default } from "@pavelsiba/quality-js/steiger"`       | Линтер архитектуры FSD с исключениями под файловый роутинг TanStack                    |
+| Часть                 | Подключение                                                                          | Что даёт                                                                               |
+| --------------------- | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| Biome                 | `biome.json`: `"extends": ["@pavelsiba/quality-js/configs/base"]`                    | Формат, линтер, сортировка импортов, встроенные аналоги sonarjs и плагины безопасности |
+| Biome React           | `… "@pavelsiba/quality-js/configs/react"` — после `base`                             | Правила хуков React                                                                    |
+| TypeScript            | `tsconfig.json`: `"extends": "@pavelsiba/quality-js/tsconfig/node.json"`             | Строгая проверка типов для Node: NodeNext, ES2023                                      |
+| TypeScript            | `… "@pavelsiba/quality-js/tsconfig/bundler.json"`                                    | То же для фронтенда: bundler, DOM, react-jsx                                           |
+| commitlint            | `commitlint.config.js`: `export { default } from "@pavelsiba/quality-js/commitlint"` | Conventional Commits, описание коммита по-русски                                       |
+| ESLint                | `eslint.config.js`: `[...base(), ...react(), ...sonar(), ...fsd()]` из `…/eslint`    | Для проектов на ESLint: стиль, хуки React, sonarjs, границы слоёв FSD                  |
+| steiger               | `steiger.config.js`: `export { default } from "@pavelsiba/quality-js/steiger"`       | Линтер архитектуры FSD с исключениями под файловый роутинг TanStack                    |
+| semantic-release      | `.releaserc.json`: `"extends": "@pavelsiba/quality-js/release"`                      | Релиз по Conventional Commits: версия, `CHANGELOG.md`, тег `vX.Y.Z`, GitHub, npmjs     |
+| Workflow безопасности | `uses: Pavelsiba/quality-js/.github/workflows/security.yml@<sha>`                    | gitleaks по истории, actionlint + zizmor, аудит зависимостей                           |
 
 ### Biome: `configs/base`
 
@@ -103,6 +105,50 @@ export default [
 `routeTree.gen.ts` и `server/`. Проектные исключения (например, `public-api` для папки со стилями)
 проект дописывает у себя после реэкспорта.
 
+### semantic-release: `…/release`
+
+`.releaserc.json` проекта:
+
+```json
+{ "extends": "@pavelsiba/quality-js/release" }
+```
+
+Ветка `main`, тег `vX.Y.Z`, пресет `conventionalcommits` с разделами «Новое», «Исправления»,
+«Производительность» (остальные типы в заметки не попадают), `CHANGELOG.md`, релизный коммит
+`chore(release): X.Y.Z [skip ci]`, релиз на GitHub, публикация на npmjs. Проект, который не публикуется
+на npmjs, строит конфиг фабрикой в `release.config.js`:
+
+```js
+import { release } from "@pavelsiba/quality-js/release"
+
+export default release({ npmPublish: false })
+```
+
+Плагины `@semantic-release/changelog`, `@semantic-release/git` и пресет
+`conventional-changelog-conventionalcommits` проект ставит сам, как и `semantic-release` ≥ 25.
+
+### Workflow безопасности
+
+`.github/workflows/security.yml` — переиспользуемый workflow (`workflow_call`) с тремя джобами:
+
+- `secrets` — gitleaks по всей истории, находки скрыты (`--redact`);
+- `workflows` — actionlint и zizmor по `.github` проекта;
+- `audit` — `npm audit --omit=dev`; для проекта не на npm — вход `audit: false`.
+
+Версии сканеров закреплены и сверяются по sha256 ассета релиза. Подключение:
+
+```yaml
+jobs:
+  security:
+    permissions:
+      contents: read
+    uses: Pavelsiba/quality-js/.github/workflows/security.yml@<sha> # vX.Y.Z
+    with:
+      audit: true
+```
+
+Ссылку на `<sha>` обновляет Dependabot (`github-actions`).
+
 ## Установка
 
 Пакет публичный, на npmjs.org: ставится без токенов — в CI, Docker, у dependabot и в форках.
@@ -131,6 +177,9 @@ npm i -D eslint-plugin-boundaries eslint-import-resolver-typescript   # fsd()
 
 # steiger
 npm i -D steiger @feature-sliced/steiger-plugin
+
+# semantic-release
+npm i -D semantic-release @semantic-release/changelog @semantic-release/git conventional-changelog-conventionalcommits
 ```
 
 Например, фронтенд-проект на Biome и TypeScript ставит

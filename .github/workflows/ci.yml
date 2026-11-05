@@ -28,12 +28,19 @@ jobs:
       - run: npm run lint
       - run: npm test
 
+  # Безопасность — тот же переиспользуемый workflow, что зовут проекты: на пакете он проверен до них.
+  security:
+    name: Security
+    permissions:
+      contents: read
+    uses: ./.github/workflows/security.yml # zizmor: ignore[self-repository]
+
   # Релиз — после зелёных проверок на main: semantic-release по conventional commits ставит версию в
   # package.json, пишет CHANGELOG.md, тег vX.Y.Z и публикует пакет на npmjs.org.
   # Руками version и теги не трогать: мажорная версия — только от feat! / BREAKING CHANGE.
   release:
     name: Release
-    needs: check
+    needs: [check, security]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:

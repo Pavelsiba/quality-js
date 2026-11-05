@@ -32,6 +32,10 @@
       "types": "./configs/steiger/index.d.ts",
       "default": "./configs/steiger/index.js"
     },
+    "./release": {
+      "types": "./configs/release/index.d.ts",
+      "default": "./configs/release/index.js"
+    },
     "./package.json": "./package.json"
   },
   "engines": {
@@ -41,12 +45,16 @@
     "@biomejs/biome": ">=2.6.0",
     "@commitlint/config-conventional": ">=20.0.0",
     "@feature-sliced/steiger-plugin": ">=0.6.0",
+    "@semantic-release/changelog": ">=6.0.0",
+    "@semantic-release/git": ">=10.0.0",
     "@stylistic/eslint-plugin": ">=5.0.0",
+    "conventional-changelog-conventionalcommits": ">=9.0.0",
     "eslint": ">=9.0.0",
     "eslint-import-resolver-typescript": ">=4.0.0",
     "eslint-plugin-boundaries": ">=7.0.0",
     "eslint-plugin-react-hooks": ">=5.0.0",
     "eslint-plugin-sonarjs": ">=4.0.0",
+    "semantic-release": ">=25.0.0",
     "steiger": ">=0.5.13",
     "typescript-eslint": ">=8.0.0"
   },
@@ -60,7 +68,16 @@
     "@feature-sliced/steiger-plugin": {
       "optional": true
     },
+    "@semantic-release/changelog": {
+      "optional": true
+    },
+    "@semantic-release/git": {
+      "optional": true
+    },
     "@stylistic/eslint-plugin": {
+      "optional": true
+    },
+    "conventional-changelog-conventionalcommits": {
       "optional": true
     },
     "eslint": {
@@ -76,6 +93,9 @@
       "optional": true
     },
     "eslint-plugin-sonarjs": {
+      "optional": true
+    },
+    "semantic-release": {
       "optional": true
     },
     "steiger": {
