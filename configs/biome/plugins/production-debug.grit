@@ -1,0 +1,5 @@
+// debug: true в конфигурации оставляет в проде трассировки и внутренние данные. Если флаг включён
+// только в разработке — гасить: // biome-ignore lint/plugin/production-debug: причина
+`debug: true` as $hit where {
+  register_diagnostic(span=$hit, message="production-debug: debug: true. Включайте отладку только в разработке (по переменной окружения).", severity="info")
+}

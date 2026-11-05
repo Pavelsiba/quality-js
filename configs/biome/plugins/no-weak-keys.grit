@@ -1,0 +1,6 @@
+// RSA-ключ короче 2048 бит раскладывается на множители за разумное время. Гасить:
+// // biome-ignore lint/plugin/no-weak-keys: причина
+`modulusLength: $n` as $hit where {
+  $n <: r"^(?:[0-9]{1,3}|1[0-9]{3}|20[0-3][0-9]|204[0-7])$",
+  register_diagnostic(span=$hit, message="no-weak-keys: ключ короче 2048 бит. Ставьте modulusLength: 2048 или больше (лучше 3072).", severity="info")
+}

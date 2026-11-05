@@ -1,0 +1,14 @@
+// chmod с правом записи или выполнения «для всех» (0o777, 0o666, 0o757): любой пользователь системы
+// меняет файл. Гасить: // biome-ignore lint/plugin/file-permissions: причина
+or {
+  `chmod($_, $mode, $...)`,
+  `chmodSync($_, $mode)`,
+  `$_.chmod($_, $mode, $...)`,
+  `$_.chmodSync($_, $mode)`
+} as $hit where {
+  $mode <: or {
+    r"^0o[0-7]*[2367]$",
+    r"^.[0-7]{2,3}[2367].$"
+  },
+  register_diagnostic(span=$hit, message="file-permissions: файл доступен на запись всем пользователям. Ставьте 0o644 для файлов и 0o755 для каталогов.", severity="info")
+}

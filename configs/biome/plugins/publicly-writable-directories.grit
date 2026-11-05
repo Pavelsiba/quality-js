@@ -1,0 +1,7 @@
+// Литерал /tmp, /var/tmp или /dev/shm: каталог открыт на запись всем, другой пользователь подменяет
+// файл по предсказуемому имени. Берите fs.mkdtemp(path.join(os.tmpdir(), "…")).
+// Гасить: // biome-ignore lint/plugin/publicly-writable-directories: причина
+JsStringLiteralExpression() as $hit where {
+  $hit <: r"^.(?:/tmp|/var/tmp|/usr/tmp|/dev/shm)(?:/.*)?.$",
+  register_diagnostic(span=$hit, message="publicly-writable-directories: общий каталог с предсказуемым путём. Берите fs.mkdtemp(path.join(os.tmpdir(), \"…\")).", severity="info")
+}

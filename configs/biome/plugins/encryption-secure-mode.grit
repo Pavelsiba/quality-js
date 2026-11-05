@@ -1,0 +1,9 @@
+// AES в режиме ECB или CBC без MAC: ECB выдаёт повторы открытого текста, CBC подвержен атакам на
+// дополнение и подмену. Алиасы aes128 / aes256 в Node — это CBC. Гасить: // biome-ignore lint/plugin/encryption-secure-mode: причина
+or {
+  `createCipheriv($algo, $...)`,
+  `$_.createCipheriv($algo, $...)`
+} as $hit where {
+  $algo <: r"(?i)^.aes-?[0-9]+(?:-(?:ecb|cbc))?.$",
+  register_diagnostic(span=$hit, message="encryption-secure-mode: AES в режиме ECB или CBC без MAC. Берите AES-256-GCM или ChaCha20-Poly1305.", severity="info")
+}

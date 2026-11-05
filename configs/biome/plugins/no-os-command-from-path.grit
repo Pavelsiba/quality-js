@@ -1,0 +1,7 @@
+// exec / spawn с командой без пути ищет её в PATH: подмена PATH запускает чужой исполняемый файл.
+// Гасить: // biome-ignore lint/plugin/no-os-command-from-path: причина
+`$callee($cmd, $...)` as $hit where {
+  $callee <: r"^(?:(?:child_process|childProcess|cp)[.])?(?:exec|execSync|execFile|execFileSync|spawn|spawnSync)$",
+  $cmd <: r"^[\"'][A-Za-z0-9_-]+(?: .*)?[\"']$",
+  register_diagnostic(span=$hit, message="no-os-command-from-path: команда ищется в PATH. Укажите абсолютный путь к исполняемому файлу.", severity="info")
+}

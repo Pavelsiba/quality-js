@@ -1,0 +1,5 @@
+// noent: true в libxmljs подставляет внешние сущности XML: документ читает локальные файлы и ходит
+// по сети (XXE). Гасить: // biome-ignore lint/plugin/xml-parser-xxe: причина
+`noent: true` as $hit where {
+  register_diagnostic(span=$hit, message="xml-parser-xxe: noent: true включает внешние сущности XML. Уберите опцию или поставьте false.", severity="info")
+}

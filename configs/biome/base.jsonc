@@ -148,7 +148,15 @@
     { "path": "./plugins/no-same-argument-assert.grit", "resolutionKind": "config" },
     { "path": "./plugins/no-trivial-assertions.grit", "resolutionKind": "config" },
     { "path": "./plugins/vitest-mock-at-module-scope.grit", "resolutionKind": "config" },
-    { "path": "./plugins/async-test-assertions.grit", "resolutionKind": "config" }
+    { "path": "./plugins/async-test-assertions.grit", "resolutionKind": "config" },
+    { "path": "./plugins/encryption-secure-mode.grit", "resolutionKind": "config" },
+    { "path": "./plugins/file-permissions.grit", "resolutionKind": "config" },
+    { "path": "./plugins/no-weak-keys.grit", "resolutionKind": "config" },
+    { "path": "./plugins/unverified-hostname.grit", "resolutionKind": "config" },
+    { "path": "./plugins/xml-parser-xxe.grit", "resolutionKind": "config" },
+    { "path": "./plugins/production-debug.grit", "resolutionKind": "config" },
+    { "path": "./plugins/publicly-writable-directories.grit", "resolutionKind": "config" },
+    { "path": "./plugins/no-os-command-from-path.grit", "resolutionKind": "config" }
   ],
   "overrides": [
     {

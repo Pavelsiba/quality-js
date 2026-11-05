@@ -1,0 +1,12 @@
+// checkServerIdentity, который ничего не возвращает, отключает проверку имени хоста в сертификате TLS:
+// подмена сервера проходит незамеченной. Гасить: // biome-ignore lint/plugin/unverified-hostname: причина
+or {
+  `checkServerIdentity: () => undefined`,
+  `checkServerIdentity: () => {}`,
+  `checkServerIdentity: ($_, $_) => undefined`,
+  `checkServerIdentity: ($_, $_) => {}`,
+  `checkServerIdentity: function() {}`,
+  `checkServerIdentity: function($_, $_) {}`
+} as $hit where {
+  register_diagnostic(span=$hit, message="unverified-hostname: checkServerIdentity не проверяет имя хоста. Уберите опцию или вызовите tls.checkServerIdentity.", severity="info")
+}
