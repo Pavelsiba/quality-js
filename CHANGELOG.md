@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.0](https://github.com/Pavelsiba/quality-js/compare/v1.0.2...v2.0.0) (2026-11-05)
+
+### ⚠ BREAKING CHANGES
+
+* удалены папка markdownlint/ и экспорт @pavelsiba/quality-js/markdownlint.
+Проектам, которые наследуют markdownlint/.markdownlint.jsonc через node_modules, нужен
+собственный конфиг (в пакете он состоял из одной настройки MD013: false).
+
+### Новое
+
+* markdownlint-cli2 убран из зависимостей и CI, конфиг markdownlint из пакета удалён ([2708323](https://github.com/Pavelsiba/quality-js/commit/27083230ca01c7cb8b74a1980800ae13b14a9cfb))
+
 ## [1.0.2](https://github.com/Pavelsiba/quality-js/compare/v1.0.1...v1.0.2) (2026-11-04)
 
 ### Исправления
