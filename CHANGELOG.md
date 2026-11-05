@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.0](https://github.com/Pavelsiba/quality-js/compare/v2.4.0...v2.5.0) (2026-11-05)
+
+### Новое
+
+* **eslint:** добавлены фабрики ESLint и конфиг steiger ([ca5f890](https://github.com/Pavelsiba/quality-js/commit/ca5f89045a5f8636e1e52ff8a5237a13e2cc923c))
+* **release:** добавлены экспорт release и переиспользуемый workflow безопасности ([b5e0586](https://github.com/Pavelsiba/quality-js/commit/b5e05868681f037f0fb0fb379180646095461a75))
+
 ## [2.4.0](https://github.com/Pavelsiba/quality-js/compare/v2.3.0...v2.4.0) (2026-11-05)
 
 ### Новое
