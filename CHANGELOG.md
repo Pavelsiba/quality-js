@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.2.0](https://github.com/Pavelsiba/quality-js/compare/v2.1.0...v2.2.0) (2026-11-05)
+
+### Новое
+
+* **biome:** добавлены плагины GritQL для тестов уровнем info ([6b54a37](https://github.com/Pavelsiba/quality-js/commit/6b54a37a3bcebb41f00b03991619b32fe23672f5))
+
 ## [2.1.0](https://github.com/Pavelsiba/quality-js/compare/v2.0.0...v2.1.0) (2026-11-05)
 
 ### Новое
