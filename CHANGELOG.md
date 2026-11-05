@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.4.0](https://github.com/Pavelsiba/quality-js/compare/v2.3.0...v2.4.0) (2026-11-05)
+
+### Новое
+
+* **biome:** добавлены плагины GritQL для Vitest уровнем info ([edfaceb](https://github.com/Pavelsiba/quality-js/commit/edfaceb6b5d09e06a726ac247694ff6cd7ece5ec))
+
 ## [2.3.0](https://github.com/Pavelsiba/quality-js/compare/v2.2.0...v2.3.0) (2026-11-05)
 
 ### Новое
