@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.1.0](https://github.com/Pavelsiba/quality-js/compare/v2.0.0...v2.1.0) (2026-11-05)
+
+### Новое
+
+* **biome:** добавлены плагины GritQL безопасности Node уровнем info ([2f8e49d](https://github.com/Pavelsiba/quality-js/commit/2f8e49d718c953d77eded7606f1b414f368515f8))
+
 ## [2.0.0](https://github.com/Pavelsiba/quality-js/compare/v1.0.2...v2.0.0) (2026-11-05)
 
 ### ⚠ BREAKING CHANGES
