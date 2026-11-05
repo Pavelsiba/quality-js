@@ -1,0 +1,11 @@
+// expect(promise).resolves / .rejects возвращает промис. Без await или return тест заканчивается
+// раньше, чем проверка отработала, и провал ожидания не виден.
+// Гасить: // biome-ignore lint/plugin/async-test-assertions: причина
+JsExpressionStatement(expression=$e) as $hit where {
+  $e <: JsCallExpression(callee=$callee),
+  $callee <: contains or {
+    `expect($_).resolves`,
+    `expect($_).rejects`
+  },
+  register_diagnostic(span=$hit, message="async-test-assertions: .resolves / .rejects без await или return — тест закончится до проверки. Добавьте await.", severity="info")
+}

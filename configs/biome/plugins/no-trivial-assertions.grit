@@ -1,0 +1,10 @@
+// expect(литерал) и assert(true) проверяют константу, а не поведение кода: тест зелёный при любой
+// реализации. Гасить: // biome-ignore lint/plugin/no-trivial-assertions: причина
+`$c($v)` as $hit where {
+  $c <: r"^(?:expect|assert|assert[.]ok)$",
+  $v <: or {
+    r"^(?:true|false|null|[0-9][0-9._]*)$",
+    r"^[\"'].*[\"']$"
+  },
+  register_diagnostic(span=$hit, message="no-trivial-assertions: проверяется литерал, а не результат кода. Передайте в expect значение из тестируемого кода.", severity="info")
+}

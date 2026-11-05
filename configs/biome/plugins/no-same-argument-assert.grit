@@ -1,0 +1,14 @@
+// Сравнение значения с самим собой всегда проходит: ожидание ничего не проверяет. Берутся только
+// простые имена и цепочки полей (литералы — дело no-trivial-assertions) — у вызовов (`next()`) два одинаковых текста дают разные значения.
+// Гасить: // biome-ignore lint/plugin/no-same-argument-assert: причина
+or {
+  `expect($a).$m($a)`,
+  `expect($a).not.$m($a)`,
+  `assert.$m($a, $a)`,
+  `assert.$m($a, $a, $_)`
+} as $hit where {
+  $m <: r"^(?:toBe|toEqual|toStrictEqual|equal|strictEqual|deepEqual|deepStrictEqual)$",
+  $a <: r"^[A-Za-z_][A-Za-z0-9_.]*$",
+  $a <: not r"^(?:true|false|null)$",
+  register_diagnostic(span=$hit, message="no-same-argument-assert: значение сравнивается с самим собой, проверка проходит всегда. Сравните с ожидаемым значением.", severity="info")
+}

@@ -1,0 +1,7 @@
+// vi.mock поднимается в начало файла (hoisting), поэтому внутри функции, describe или it он
+// выглядит так, будто действует локально, а действует на весь файл. Нужна локальная подмена —
+// vi.doMock. Гасить: // biome-ignore lint/plugin/vitest-mock-at-module-scope: причина
+`vi.mock($args)` as $hit where {
+  $hit <: within JsFunctionBody(),
+  register_diagnostic(span=$hit, message="vitest-mock-at-module-scope: vi.mock поднимается в начало файла и внутри функции вводит в заблуждение. Вынесите на верхний уровень или возьмите vi.doMock.", severity="info")
+}
