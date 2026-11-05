@@ -1,0 +1,5 @@
+// Отключённая проверка сертификата TLS: любой посредник подменит сервер, и клиент не заметит.
+// Гасить в месте использования: // biome-ignore lint/plugin/unverified-certificate: причина
+`rejectUnauthorized: false` as $hit where {
+  register_diagnostic(span=$hit, message="unverified-certificate: rejectUnauthorized: false отключает проверку сертификата TLS. Доверенный самоподписанный сертификат — через ca, а не отключением проверки.", severity="info")
+}

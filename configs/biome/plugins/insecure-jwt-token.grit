@@ -1,0 +1,8 @@
+// JWT с алгоритмом none: подпись не проверяется, токен подделывает кто угодно.
+// Гасить: // biome-ignore lint/plugin/insecure-jwt-token: причина
+or {
+  `algorithm: $v` where { $v <: r"(?i)^.none.$" },
+  `algorithms: $list` where { $list <: contains r"(?i)^.none.$" }
+} as $hit where {
+  register_diagnostic(span=$hit, message="insecure-jwt-token: алгоритм none отключает проверку подписи JWT. Укажите явный алгоритм (HS256, RS256, ES256).", severity="info")
+}

@@ -1,0 +1,6 @@
+// CORS с origin: "*" разрешает читать ответы любому сайту. Для публичного API без cookie это
+// нормально — тогда гасить: // biome-ignore lint/plugin/cors: причина
+`origin: $v` as $hit where {
+  $v <: r"^.[*].$",
+  register_diagnostic(span=$hit, message="cors: origin: \"*\" открывает API любому сайту. Перечислите разрешённые источники.", severity="info")
+}

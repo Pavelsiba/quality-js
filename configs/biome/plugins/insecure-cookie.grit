@@ -1,0 +1,12 @@
+// Cookie без secure уходит по HTTP открытым текстом. secure: false бывает не только у cookie
+// (почтовые клиенты, SMTP со STARTTLS), поэтому ловится он только внутри вызова, в имени которого
+// есть cookie или session, или внутри свойства cookie / cookies.
+// Гасить: // biome-ignore lint/plugin/insecure-cookie: причина
+// Регулярка в Grit сопоставляется с текстом узла целиком, поэтому «.*» по краям.
+`secure: false` as $hit where {
+  or {
+    $hit <: within `$fn($...)` where { $fn <: r"(?i).*(?:cookie|session).*" },
+    $hit <: within `$key: $_` where { $key <: r"(?i)^cookies?$" }
+  },
+  register_diagnostic(span=$hit, message="insecure-cookie: secure: false отправляет cookie по HTTP открытым текстом. Поставьте true (для локальной разработки — через окружение).", severity="info")
+}

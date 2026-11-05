@@ -134,6 +134,18 @@
       }
     }
   },
+  // Плагины GritQL (plugins/*.grit): безопасность Node. Путь считается от этого файла (resolutionKind: config),
+  // уровень info — как у любого нового правила в минорной версии. Гасить: biome-ignore lint/plugin/<имя>: причина.
+  "plugins": [
+    { "path": "./plugins/unverified-certificate.grit", "resolutionKind": "config" },
+    { "path": "./plugins/hashing.grit", "resolutionKind": "config" },
+    { "path": "./plugins/no-weak-cipher.grit", "resolutionKind": "config" },
+    { "path": "./plugins/weak-ssl.grit", "resolutionKind": "config" },
+    { "path": "./plugins/insecure-jwt-token.grit", "resolutionKind": "config" },
+    { "path": "./plugins/cookie-no-httponly.grit", "resolutionKind": "config" },
+    { "path": "./plugins/insecure-cookie.grit", "resolutionKind": "config" },
+    { "path": "./plugins/cors.grit", "resolutionKind": "config" }
+  ],
   "overrides": [
     {
       "includes": ["**/*.d.ts"],

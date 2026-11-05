@@ -1,0 +1,6 @@
+// TLS 1.0 и 1.1 признаны устаревшими (RFC 8996): известные атаки на протокол, браузеры их отключили.
+// Гасить: // biome-ignore lint/plugin/weak-ssl: причина
+`minVersion: $v` as $hit where {
+  $v <: r"^.TLSv1(?:[.]1)?.$",
+  register_diagnostic(span=$hit, message="weak-ssl: минимальная версия TLS ниже 1.2. Ставьте minVersion: \"TLSv1.2\" или выше.", severity="info")
+}

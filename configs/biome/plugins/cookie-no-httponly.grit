@@ -1,0 +1,5 @@
+// Cookie без httpOnly читается из JavaScript страницы: XSS крадёт сессию.
+// Гасить: // biome-ignore lint/plugin/cookie-no-httponly: причина
+`httpOnly: false` as $hit where {
+  register_diagnostic(span=$hit, message="cookie-no-httponly: httpOnly: false отдаёт cookie скриптам страницы. Уберите опцию или поставьте true.", severity="info")
+}

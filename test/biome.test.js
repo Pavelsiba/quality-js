@@ -2,9 +2,9 @@
 // подключает конфиг через манифест (`@pavelsiba/quality-js/configs/<имя>`), как это сделает проект.
 import assert from "node:assert/strict"
 import { execFileSync } from "node:child_process"
-import { cpSync, mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs"
+import { cpSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
-import { join } from "node:path"
+import { basename, join } from "node:path"
 import { after, describe, it } from "node:test"
 
 const root = join(import.meta.dirname, "..")
@@ -27,19 +27,20 @@ const makeProject = (fixture, configs) => {
   return dir
 }
 
-const lint = (dir, file) => {
+const diagnostics = (dir, target) => {
   let output
   try {
-    output = execFileSync(process.execPath, [biomeBin, "lint", "--reporter=json", file], {
+    output = execFileSync(process.execPath, [biomeBin, "lint", "--reporter=json", "--max-diagnostics=none", target], {
       cwd: dir,
       encoding: "utf8"
     })
   } catch (error) {
     output = error.stdout
   }
-  const report = JSON.parse(output)
-  return new Set(report.diagnostics.map((diagnostic) => diagnostic.category))
+  return JSON.parse(output).diagnostics
 }
+
+const lint = (dir, file) => new Set(diagnostics(dir, file).map((diagnostic) => diagnostic.category))
 
 after(() => {
   for (const dir of projects) rmSync(dir, { recursive: true, force: true })
@@ -58,6 +59,41 @@ describe("configs/base", () => {
   it("не трогает чистый код", () => {
     assert.deepEqual([...lint(dir, "src/clean.ts")], [])
   })
+})
+
+// Фикстура плагина — plugins/<имя>.ts: строки с `// ловит` плагин обязан поймать, остальные
+// (граничные случаи, biome-ignore) — пропустить. Диагностики плагинов в отчёте имеют категорию
+// `plugin`, имя правила в них — префикс сообщения.
+describe("плагины GritQL в configs/base", () => {
+  const pluginsDir = join(root, "configs", "biome", "plugins")
+  const fixturesDir = join(import.meta.dirname, "fixtures", "plugins")
+  const names = (directory, extension) =>
+    readdirSync(directory)
+      .filter((file) => file.endsWith(extension))
+      .map((file) => basename(file, extension))
+  const dir = makeProject("plugins", ["base"])
+  const found = diagnostics(dir, "src").filter((diagnostic) => diagnostic.category === "plugin")
+
+  it("у каждого плагина есть фикстура", () => {
+    assert.deepEqual(names(fixturesDir, ".ts"), names(pluginsDir, ".grit"))
+  })
+
+  for (const name of names(pluginsDir, ".grit")) {
+    it(`${name}: ловит помеченные строки и только их`, () => {
+      const expected = readFileSync(join(fixturesDir, `${name}.ts`), "utf8")
+        .split("\n")
+        .flatMap((text, index) => (text.includes("// ловит") ? [index + 1] : []))
+      const own = found.filter((diagnostic) => diagnostic.location.path.replaceAll("\\", "/") === `src/${name}.ts`)
+      assert.deepEqual(
+        own.map((diagnostic) => diagnostic.location.start.line).sort((a, b) => a - b),
+        expected
+      )
+      for (const diagnostic of own) {
+        assert.ok(diagnostic.message.startsWith(`${name}: `), diagnostic.message)
+        assert.equal(diagnostic.severity, "info")
+      }
+    })
+  }
 })
 
 describe("configs/react", () => {

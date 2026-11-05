@@ -1,0 +1,9 @@
+// MD5 и SHA-1: коллизии строятся за часы, подпись и проверка целостности на них не держатся.
+// Не для безопасности (ключ кэша, ETag) — гасить: // biome-ignore lint/plugin/hashing: причина
+or {
+  `createHash($algo)`,
+  `$_.createHash($algo)`
+} as $hit where {
+  $algo <: r"(?i)^.(?:md5|sha-?1).$",
+  register_diagnostic(span=$hit, message="hashing: MD5 и SHA-1 ненадёжны для безопасности. Берите SHA-256 и выше (пароли — argon2 или scrypt).", severity="info")
+}

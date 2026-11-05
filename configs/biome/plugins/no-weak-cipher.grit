@@ -1,0 +1,9 @@
+// Устаревшие шифры (DES, 3DES, RC2, RC4, Blowfish, IDEA, CAST5): ключ перебирается или
+// шифртекст ломается статистикой. Гасить: // biome-ignore lint/plugin/no-weak-cipher: причина
+or {
+  `createCipheriv($algo, $...)`,
+  `$_.createCipheriv($algo, $...)`
+} as $hit where {
+  $algo <: r"(?i)^.(?:des|des3|des-.*|rc2.*|rc4.*|bf.*|blowfish.*|idea.*|cast5.*).$",
+  register_diagnostic(span=$hit, message="no-weak-cipher: слабый шифр. Берите AES-256-GCM или ChaCha20-Poly1305.", severity="info")
+}
