@@ -1,0 +1,10 @@
+// ${…} в inline-снимке: Vitest сравнивает снимок как текст, подстановка вычисляется до сравнения и
+// подгоняет снимок под результат. Фиксируйте литерал. Гасить:
+// // biome-ignore lint/plugin/no-interpolation-in-inline-snapshots: причина
+or {
+  `$_.toMatchInlineSnapshot($...)`,
+  `$_.toThrowErrorMatchingInlineSnapshot($...)`
+} as $hit where {
+  $hit <: r"(?s)^.*[$][{].*$",
+  register_diagnostic(span=$hit, message="no-interpolation-in-inline-snapshots: ${} внутри inline-снимка. Запишите ожидаемый текст литералом.", severity="info")
+}

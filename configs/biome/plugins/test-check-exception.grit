@@ -1,0 +1,10 @@
+// toThrow() без аргумента проходит при любой ошибке, в том числе не той, что ждали: тест не
+// отличает нужный отказ от случайного. Передайте текст, класс или регулярку. Проверка «не бросает»
+// (.not.toThrow()) допустима и не ловится. Гасить: // biome-ignore lint/plugin/test-check-exception: причина
+or {
+  `$obj.toThrow()`,
+  `$obj.toThrowError()`
+} as $hit where {
+  $obj <: not r"(?s)^.*[.]not$",
+  register_diagnostic(span=$hit, message="test-check-exception: toThrow() без аргумента принимает любую ошибку. Укажите текст, класс или регулярку.", severity="info")
+}

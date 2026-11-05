@@ -123,7 +123,7 @@ export { default } from "@pavelsiba/quality-js/commitlint"
 
 ## Плагины GritQL
 
-`base` подключает 20 плагинов, все уровнем `info`. Они смотрят на форму кода без типов, поэтому
+`base` подключает 27 плагинов, все уровнем `info`. Они смотрят на форму кода без типов, поэтому
 ловят очевидные случаи, а не значения из переменных. Имя правила — в начале сообщения.
 
 ### Безопасность Node
@@ -149,12 +149,19 @@ export { default } from "@pavelsiba/quality-js/commitlint"
 
 ### Тесты (Vitest)
 
-| Плагин                        | Что ловит                             |
-| ----------------------------- | ------------------------------------- |
-| `no-same-argument-assert`     | `expect(x).toBe(x)`                   |
-| `no-trivial-assertions`       | `expect(true).toBe(true)`             |
-| `vitest-mock-at-module-scope` | `vi.mock` не на верхнем уровне модуля |
-| `async-test-assertions`       | `.resolves` / `.rejects` без `await`  |
+| Плагин                                 | Что ловит                                                                       |
+| -------------------------------------- | ------------------------------------------------------------------------------- |
+| `no-same-argument-assert`              | `expect(x).toBe(x)`                                                             |
+| `no-trivial-assertions`                | `expect(true).toBe(true)`                                                       |
+| `vitest-mock-at-module-scope`          | `vi.mock` не на верхнем уровне модуля                                           |
+| `async-test-assertions`                | `.resolves` / `.rejects` без `await`                                            |
+| `assertions-in-test-cases`             | `expect` на верхнем уровне модуля, вне `it` и хуков                             |
+| `no-incomplete-assertions`             | `expect(x)` без матчера или `.toBe` без вызова                                  |
+| `no-empty-parameterized-test-dataset`  | `it.each([])`, `describe.each([])`                                              |
+| `synchronous-suite-callback`           | `async`-колбэк у `describe`                                                     |
+| `test-check-exception`                 | `toThrow()` без аргумента (`.not.toThrow()` допустим)                           |
+| `prefer-specific-assertions`           | `expect(a === b).toBe(true)` вместо `toBe`, `toBeGreaterThan`, `toBeInstanceOf` |
+| `no-interpolation-in-inline-snapshots` | `${}` внутри `toMatchInlineSnapshot`                                            |
 
 Погасить одно место:
 

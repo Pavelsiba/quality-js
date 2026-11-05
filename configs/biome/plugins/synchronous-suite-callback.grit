@@ -1,0 +1,8 @@
+// Колбэк describe выполняется синхронно: Vitest не ждёт промис, и тесты, объявленные после await,
+// не попадают в набор. Асинхронную подготовку выносите в beforeAll. Гасить:
+// // biome-ignore lint/plugin/synchronous-suite-callback: причина
+`$d($_, $cb)` as $hit where {
+  $d <: r"^describe(?:[.](?:only|skip|concurrent|sequential))?$",
+  $cb <: r"(?s)^async[ (].*$",
+  register_diagnostic(span=$hit, message="synchronous-suite-callback: async-колбэк describe. Уберите async, подготовку вынесите в beforeAll.", severity="info")
+}

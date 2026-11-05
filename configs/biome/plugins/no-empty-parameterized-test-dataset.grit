@@ -1,0 +1,6 @@
+// it.each([]) и describe.each([]) создают ноль тестов: набор данных пуст, и ничего не проверяется
+// без единого сообщения. Гасить: // biome-ignore lint/plugin/no-empty-parameterized-test-dataset: причина
+`$t.each([])` as $hit where {
+  $t <: r"^(?:it|test|describe)(?:[.](?:only|skip|concurrent|sequential))?$",
+  register_diagnostic(span=$hit, message="no-empty-parameterized-test-dataset: пустой набор данных, тестов не будет. Добавьте данные или уберите each.", severity="info")
+}

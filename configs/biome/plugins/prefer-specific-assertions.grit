@@ -1,0 +1,23 @@
+// expect(a === b).toBe(true) при провале говорит только «expected true, got false». Матчер
+// toBe, toBeGreaterThan, toBeInstanceOf показывает оба значения. Гасить:
+// // biome-ignore lint/plugin/prefer-specific-assertions: причина
+or {
+  `expect($e).toBe($v)` where { $v <: r"^(?:true|false)$" },
+  `expect($e).toEqual($v)` where { $v <: r"^(?:true|false)$" },
+  `expect($e).toStrictEqual($v)` where { $v <: r"^(?:true|false)$" },
+  `expect($e).toBeTruthy()`,
+  `expect($e).toBeFalsy()`
+} as $hit where {
+  $e <: or {
+    `$_ === $_`,
+    `$_ !== $_`,
+    `$_ == $_`,
+    `$_ != $_`,
+    `$_ > $_`,
+    `$_ >= $_`,
+    `$_ < $_`,
+    `$_ <= $_`,
+    `$_ instanceof $_`
+  },
+  register_diagnostic(span=$hit, message="prefer-specific-assertions: сравнение внутри expect. Возьмите toBe, toBeGreaterThan, toBeInstanceOf: при провале они покажут оба значения.", severity="info")
+}

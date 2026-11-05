@@ -156,7 +156,14 @@
     { "path": "./plugins/xml-parser-xxe.grit", "resolutionKind": "config" },
     { "path": "./plugins/production-debug.grit", "resolutionKind": "config" },
     { "path": "./plugins/publicly-writable-directories.grit", "resolutionKind": "config" },
-    { "path": "./plugins/no-os-command-from-path.grit", "resolutionKind": "config" }
+    { "path": "./plugins/no-os-command-from-path.grit", "resolutionKind": "config" },
+    { "path": "./plugins/assertions-in-test-cases.grit", "resolutionKind": "config" },
+    { "path": "./plugins/no-incomplete-assertions.grit", "resolutionKind": "config" },
+    { "path": "./plugins/no-empty-parameterized-test-dataset.grit", "resolutionKind": "config" },
+    { "path": "./plugins/synchronous-suite-callback.grit", "resolutionKind": "config" },
+    { "path": "./plugins/test-check-exception.grit", "resolutionKind": "config" },
+    { "path": "./plugins/prefer-specific-assertions.grit", "resolutionKind": "config" },
+    { "path": "./plugins/no-interpolation-in-inline-snapshots.grit", "resolutionKind": "config" }
   ],
   "overrides": [
     {

@@ -1,0 +1,11 @@
+// expect(x) без матчера ничего не проверяет: тест зелёный при любом значении. Ловятся выражения-
+// операторы expect(x), expect(x).not и матчер без вызова (expect(x).toBe). Гасить:
+// // biome-ignore lint/plugin/no-incomplete-assertions: причина
+JsExpressionStatement(expression=$e) as $hit where {
+  $e <: or {
+    `expect($_)`,
+    `expect($_).$_`,
+    `expect($_).$_.$_`
+  },
+  register_diagnostic(span=$hit, message="no-incomplete-assertions: expect без матчера или без вызова матчера. Допишите проверку, например .toBe(…).", severity="info")
+}

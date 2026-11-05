@@ -1,0 +1,10 @@
+// expect на верхнем уровне модуля, вне it, test и хуков: проверка выполняется при загрузке файла,
+// падение выглядит как ошибка импорта, а не как провал теста. Гасить:
+// // biome-ignore lint/plugin/assertions-in-test-cases: причина
+`expect($_)` as $hit where {
+  $hit <: not within or {
+    JsFunctionBody(),
+    JsArrowFunctionExpression()
+  },
+  register_diagnostic(span=$hit, message="assertions-in-test-cases: expect вне функции. Перенесите проверку в it, test или хук.", severity="info")
+}
