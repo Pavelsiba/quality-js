@@ -1,6 +1,6 @@
-// Репозиторий проверяет свой Markdown тем же конфигом, что отдаёт проектам.
+// Проза в README и docs переносится по смыслу, а не по 80 колонкам.
 {
-  "config": { "extends": "./markdownlint/.markdownlint.jsonc" },
+  "config": { "MD013": false },
   "globs": ["**/*.md"],
   "ignores": ["node_modules/**", "CHANGELOG.md"]
 }

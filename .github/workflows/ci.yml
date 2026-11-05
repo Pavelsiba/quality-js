@@ -26,7 +26,6 @@ jobs:
         env:
           LEFTHOOK: "0"
       - run: npm run lint
-      - run: npm run lint:md
       - run: npm test
 
   # Релиз — после зелёных проверок на main: semantic-release по conventional commits ставит версию в

@@ -14,7 +14,7 @@ pre-commit:
       stage_fixed: true
 
     - name: markdown
-      glob: "{*.md,.markdownlint-cli2.jsonc,markdownlint/*}"
+      glob: "{*.md,.markdownlint-cli2.jsonc}"
       run: npm run lint:md
 
     # Тесты подключают конфиги как проект-потребитель: правка конфига без них не проверена.

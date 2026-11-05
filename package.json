@@ -1,7 +1,7 @@
 {
   "name": "@pavelsiba/quality-js",
   "version": "1.0.2",
-  "description": "Общие конфиги quality gates для TS/JS-проектов: Biome, tsconfig, commitlint, markdownlint.",
+  "description": "Общие конфиги quality gates для TS/JS-проектов: Biome, tsconfig, commitlint.",
   "license": "MIT",
   "type": "module",
   "repository": {
@@ -15,8 +15,7 @@
     "biome-manifest.json",
     "configs",
     "tsconfig",
-    "commitlint",
-    "markdownlint"
+    "commitlint"
   ],
   "exports": {
     ".": {
@@ -27,7 +26,6 @@
       "types": "./commitlint/index.d.ts",
       "default": "./commitlint/index.js"
     },
-    "./markdownlint": "./markdownlint/.markdownlint.jsonc",
     "./package.json": "./package.json"
   },
   "engines": {
@@ -35,8 +33,7 @@
   },
   "peerDependencies": {
     "@biomejs/biome": ">=2.6.0",
-    "@commitlint/config-conventional": ">=20.0.0",
-    "markdownlint-cli2": ">=0.20.0"
+    "@commitlint/config-conventional": ">=20.0.0"
   },
   "peerDependenciesMeta": {
     "@biomejs/biome": {
@@ -44,14 +41,11 @@
     },
     "@commitlint/config-conventional": {
       "optional": true
-    },
-    "markdownlint-cli2": {
-      "optional": true
     }
   },
   "scripts": {
     "lint": "biome check",
-    "lint:md": "markdownlint-cli2",
+    "lint:md": "npx --yes markdownlint-cli2@0.24.0",
     "test": "node --test \"test/*.test.js\"",
     "prepare": "lefthook install"
   },
@@ -64,11 +58,6 @@
     "@semantic-release/git": "^11.0.1",
     "conventional-changelog-conventionalcommits": "^9.3.1",
     "lefthook": "^2.2.2",
-    "markdownlint-cli2": "^0.24.0",
     "semantic-release": "^25.0.9"
-  },
-  "overrides": {
-    "re2js": "^2.9.1",
-    "katex": "^0.18.2"
   }
 }

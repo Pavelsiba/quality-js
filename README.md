@@ -13,14 +13,13 @@ npm i -D @pavelsiba/quality-js @biomejs/biome
 
 ## Что внутри
 
-| Подключение                                                                                                                    | Что                                                             |
-| ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------- |
-| `biome.json`: `"extends": ["@pavelsiba/quality-js/configs/base"]`                                                              | стиль, recommended и встроенные аналоги sonarjs (Biome ≥ 2.6)   |
-| `… "@pavelsiba/quality-js/configs/react"` — после `base`                                                                       | правила хуков React                                             |
-| `tsconfig.json`: `"extends": "@pavelsiba/quality-js/tsconfig/node.json"`                                                       | Node: NodeNext, ES2023                                          |
-| `… "@pavelsiba/quality-js/tsconfig/bundler.json"`                                                                              | фронт: bundler, DOM, react-jsx                                  |
-| `commitlint.config.js`: `export { default } from "@pavelsiba/quality-js/commitlint"`                                           | conventional commits, описание по-русски                        |
-| `.markdownlint-cli2.jsonc`: `"config": { "extends": "./node_modules/@pavelsiba/quality-js/markdownlint/.markdownlint.jsonc" }` | markdownlint (имя пакета в `extends` не понимает — только путь) |
+| Подключение                                                                          | Что                                                           |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------- |
+| `biome.json`: `"extends": ["@pavelsiba/quality-js/configs/base"]`                    | стиль, recommended и встроенные аналоги sonarjs (Biome ≥ 2.6) |
+| `… "@pavelsiba/quality-js/configs/react"` — после `base`                             | правила хуков React                                           |
+| `tsconfig.json`: `"extends": "@pavelsiba/quality-js/tsconfig/node.json"`             | Node: NodeNext, ES2023                                        |
+| `… "@pavelsiba/quality-js/tsconfig/bundler.json"`                                    | фронт: bundler, DOM, react-jsx                                |
+| `commitlint.config.js`: `export { default } from "@pavelsiba/quality-js/commitlint"` | conventional commits, описание по-русски                      |
 
 ## Версии
 

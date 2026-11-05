@@ -4,8 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Что это
 
-`@pavelsiba/quality-js` — пакет общих конфигов quality gates (Biome, tsconfig, commitlint,
-markdownlint) для TS/JS-проектов pavelsiba. Кода, кроме `commitlint/index.js`, нет: продукт — сами
+`@pavelsiba/quality-js` — пакет общих конфигов quality gates (Biome, tsconfig, commitlint)
+для TS/JS-проектов pavelsiba. Кода, кроме `commitlint/index.js`, нет: продукт — сами
 конфиги. Проекты подключают их через `extends` и получают правки обновлением версии; ставит пакет в
 проекты скилл `quality-gates` из pavelsiba-skills (таблица sonarjs → Biome —
 `D:/Obsidian/pavelsiba-skills/quality-gates/sonarjs-biome.md`).
@@ -19,14 +19,15 @@ markdownlint) для TS/JS-проектов pavelsiba. Кода, кроме `com
 
 ```bash
 npm run lint       # biome check (репозиторий линтится собственным configs/biome/base.jsonc)
-npm run lint:md    # markdownlint-cli2 тем же конфигом, что отдаётся проектам
+npm run lint:md    # markdownlint-cli2 через npx (версия закреплена в скрипте, в зависимостях его нет), конфиг — `.markdownlint-cli2.jsonc`
 npm test           # node --test "test/*.test.js"
 node --test --test-name-pattern="хук под условием" test/biome.test.js   # один тест
 ```
 
 Lefthook (`npm install` ставит хуки): pre-commit — `biome check --write` по staged-файлам,
-markdownlint, а при правке `configs/**`, `biome-manifest.json`, `package.json`, `test/**` — тесты;
-commit-msg — commitlint из `commitlint/index.js`.
+markdownlint (только в хуке: ни в зависимостях, ни в CI его нет), а при правке `configs/**`,
+`biome-manifest.json`, `package.json`, `test/**` — тесты; commit-msg — commitlint из
+`commitlint/index.js`.
 
 ## Как устроено
 
@@ -42,8 +43,6 @@ commit-msg — commitlint из `commitlint/index.js`.
   `vcs.useIgnoreFile` в `base`.
 - **tsconfig:** `base.json` — строгие флаги и `noEmit`; `node.json` (NodeNext) и `bundler.json`
   (bundler, DOM, react-jsx) расширяют его.
-- **markdownlint:** имя пакета в `extends` не понимается — проекты ссылаются путём через
-  `node_modules`.
 
 ## Версии и правила
 
