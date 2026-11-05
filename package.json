@@ -24,6 +24,14 @@
       "types": "./configs/commitlint/index.d.ts",
       "default": "./configs/commitlint/index.js"
     },
+    "./eslint": {
+      "types": "./configs/eslint/index.d.ts",
+      "default": "./configs/eslint/index.js"
+    },
+    "./steiger": {
+      "types": "./configs/steiger/index.d.ts",
+      "default": "./configs/steiger/index.js"
+    },
     "./package.json": "./package.json"
   },
   "engines": {
@@ -31,13 +39,49 @@
   },
   "peerDependencies": {
     "@biomejs/biome": ">=2.6.0",
-    "@commitlint/config-conventional": ">=20.0.0"
+    "@commitlint/config-conventional": ">=20.0.0",
+    "@feature-sliced/steiger-plugin": ">=0.6.0",
+    "@stylistic/eslint-plugin": ">=5.0.0",
+    "eslint": ">=9.0.0",
+    "eslint-import-resolver-typescript": ">=4.0.0",
+    "eslint-plugin-boundaries": ">=7.0.0",
+    "eslint-plugin-react-hooks": ">=5.0.0",
+    "eslint-plugin-sonarjs": ">=4.0.0",
+    "steiger": ">=0.5.13",
+    "typescript-eslint": ">=8.0.0"
   },
   "peerDependenciesMeta": {
     "@biomejs/biome": {
       "optional": true
     },
     "@commitlint/config-conventional": {
+      "optional": true
+    },
+    "@feature-sliced/steiger-plugin": {
+      "optional": true
+    },
+    "@stylistic/eslint-plugin": {
+      "optional": true
+    },
+    "eslint": {
+      "optional": true
+    },
+    "eslint-import-resolver-typescript": {
+      "optional": true
+    },
+    "eslint-plugin-boundaries": {
+      "optional": true
+    },
+    "eslint-plugin-react-hooks": {
+      "optional": true
+    },
+    "eslint-plugin-sonarjs": {
+      "optional": true
+    },
+    "steiger": {
+      "optional": true
+    },
+    "typescript-eslint": {
       "optional": true
     }
   },
@@ -52,10 +96,20 @@
     "@commitlint/cli": "^21.2.4",
     "@commitlint/config-conventional": "^21.2.4",
     "@commitlint/types": "^21.2.3",
+    "@feature-sliced/steiger-plugin": "^0.8.2",
     "@semantic-release/changelog": "^7.0.0",
     "@semantic-release/git": "^11.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
     "conventional-changelog-conventionalcommits": "^9.3.1",
+    "eslint": "^10.14.0",
+    "eslint-import-resolver-typescript": "^4.4.5",
+    "eslint-plugin-boundaries": "^7.4.1",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-sonarjs": "^4.2.2",
     "lefthook": "^2.2.2",
-    "semantic-release": "^25.0.9"
+    "semantic-release": "^25.0.9",
+    "steiger": "^0.9.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.72.1"
   }
 }

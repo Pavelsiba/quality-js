@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Что это
 
-`@pavelsiba/quality-js` — пакет общих конфигов quality gates (Biome, tsconfig, commitlint)
-для TS/JS-проектов pavelsiba. Кода, кроме `configs/commitlint/index.js`, нет: продукт — сами
-конфиги. Проекты подключают их через `extends` и получают правки обновлением версии; ставит пакет в
+`@pavelsiba/quality-js` — пакет общих конфигов quality gates (Biome, ESLint, steiger, tsconfig,
+commitlint) для TS/JS-проектов pavelsiba. Кода, кроме `configs/commitlint/index.js` и фабрик
+`configs/eslint/*.js`, нет: продукт — сами конфиги. Проекты подключают их через `extends` и получают правки обновлением версии; ставит пакет в
 проекты скилл `quality-gates` из pavelsiba-skills (таблица sonarjs → Biome —
 `D:/Obsidian/pavelsiba-skills/quality-gates/sonarjs-biome.md`).
 
@@ -74,6 +74,24 @@ markdownlint (только в хуке: ни в зависимостях, ни �
   `server`, `app`, без `node_modules`) в scratchpad, положить `biome.json` с `extends` и junction на
   репозиторий, как в `makeProject` из `test/biome.test.js`, и отфильтровать диагностики `plugin` по
   префиксу имени. Эталоны остаются нетронутыми.
+- **ESLint и steiger** (`configs/eslint/`, `configs/steiger/`; экспорты `…/eslint`, `…/steiger`): для
+  проектов, которые остаются на ESLint. Фабрики `base()`, `react()`, `sonar({ typed })`,
+  `fsd({ src, serverLayers, clientFiles })` возвращают массивы flat-конфигов; типы — `index.d.ts`
+  рядом. Все плагины — опциональные peer-зависимости. `test/eslint.test.js` гоняет настоящие eslint и
+  steiger во временном проекте по фикстурам `test/fixtures/eslint/<имя>/` (в `fsd`-фикстурах строки
+  `// ловит` — места нарушений границ); в проект подкладывается junction на
+  `eslint-import-resolver-typescript`, в потребителе он стоит рядом с eslint. Подвохи:
+  - `sonar()` — рекомендованные правила sonarjs (в 4.2.2: 230 `error`, 65 `off`) минус списки
+    исключений в `sonar.js`, снятые с таблицы `sonarjs-biome.md` («Не берём» без типов и «Покрыто другим
+    инструментом»). Правила с типами без `projectService` не падают, а молча ничего не делают: отдельного
+    списка таких правил не нужно, а `meta.docs.requiresTypeChecking` врёт (помечены и regex-правила).
+  - boundaries v7: шаблон файла (`boundaries/files`) не понимает отрицание `!(…)` — исключение файлов
+    делается категорией и запрещающей политикой (`disallow` перебивает `allow`, категории файла
+    складываются). `captured: { layer: "{a}" }` из одного элемента скобки не раскрывает — одно
+    значение пишется как есть, несколько — отдельными `allow`.
+  - Политики и категории взяты с more-shop и autopartsAI, прогон `fsd()` по копиям их `src` даёт 0
+    нарушений (more-shop без `clientFiles`: их `*-queries.ts` законно импортируют серверные функции
+    из `@/server`; autopartsAI с `clientFiles` и `serverLayers`).
 - **tsconfig:** `base.json` — строгие флаги и `noEmit`; `node.json` (NodeNext) и `bundler.json`
   (bundler, DOM, react-jsx) расширяют его.
 

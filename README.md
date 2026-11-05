@@ -30,6 +30,8 @@ peer-зависимости, их проект ставит рядом (см. «
 | TypeScript  | `tsconfig.json`: `"extends": "@pavelsiba/quality-js/tsconfig/node.json"`             | Строгая проверка типов для Node: NodeNext, ES2023                                      |
 | TypeScript  | `… "@pavelsiba/quality-js/tsconfig/bundler.json"`                                    | То же для фронтенда: bundler, DOM, react-jsx                                           |
 | commitlint  | `commitlint.config.js`: `export { default } from "@pavelsiba/quality-js/commitlint"` | Conventional Commits, описание коммита по-русски                                       |
+| ESLint      | `eslint.config.js`: `[...base(), ...react(), ...sonar(), ...fsd()]` из `…/eslint`    | Для проектов на ESLint: стиль, хуки React, sonarjs, границы слоёв FSD                  |
+| steiger     | `steiger.config.js`: `export { default } from "@pavelsiba/quality-js/steiger"`       | Линтер архитектуры FSD с исключениями под файловый роутинг TanStack                    |
 
 ### Biome: `configs/base`
 
@@ -58,6 +60,49 @@ peer-зависимости, их проект ставит рядом (см. «
 Правила `@commitlint/config-conventional` плюс `subject-russian`: описание коммита должно содержать
 кириллицу. Из таких сообщений semantic-release собирает `CHANGELOG.md`.
 
+### ESLint: `…/eslint`
+
+Для проектов, которые остаются на ESLint (Biome не запускает ESLint-плагины). Четыре фабрики, каждая
+возвращает массив flat-конфигов; проект собирает нужные:
+
+```js
+import { base, fsd, react, sonar } from "@pavelsiba/quality-js/eslint"
+
+export default [
+  { ignores: [".output/**", "src/routeTree.gen.ts"] },
+  ...base(),
+  ...react(),
+  ...sonar({ typed: Boolean(process.env.CI) }),
+  ...fsd({ serverLayers: { services: ["clients", "db"], clients: ["db"], db: [] } })
+]
+```
+
+- **`base()`** — `typescript-eslint` recommended и стиль через `@stylistic`, те же правила, что у Biome:
+  двойные кавычки, без `;` и висячих запятых, 2 пробела, `type` вместо `interface`, запрет `any`.
+- **`react()`** — `react-hooks/rules-of-hooks` (`error`) и `exhaustive-deps` (`warn`).
+- **`sonar({ typed })`** — рекомендованные правила `eslint-plugin-sonarjs` без тех, что стандарт не
+  берёт (AWS, Vue, Angular, jQuery, Lodash, Cypress, chai, правила под helmet и express, подсказки вроде
+  `todo-tag`) и без закрытых `tsc`, форматтером или gitleaks. Правилам с типами TS нужен
+  `typed: true`: без него они молча ничего не делают. Типы включайте в CI, не в pre-commit — они медленные.
+- **`fsd({ src, serverLayers, clientFiles })`** — границы слоёв для `eslint-plugin-boundaries` v7:
+  `routes → widgets → features → entities → shared` и `server`. `server` могут импортировать `routes` и
+  файлы `api/` внутри `entities`, `features` и `routes` (серверные функции): секреты не попадают в
+  клиентский бандл. Параметры:
+  - `serverLayers` — подслои `src/server/<слой>`: кто кого может импортировать (без него `server` —
+    один элемент);
+  - `clientFiles` — шаблоны файлов от `src`, которым `server` запрещён даже в `api/`, например
+    `["+(entities|features)/**/api/*-queries.{ts,tsx}"]` — клиентские обёртки запросов;
+  - `src` — папка с исходниками, по умолчанию `src`.
+
+  Алиасы (`@/…`) разрешает `eslint-import-resolver-typescript` по `tsconfig.json` проекта.
+
+### steiger
+
+Рекомендованные правила `@feature-sliced/steiger-plugin`, кроме `insignificant-slice`: steiger не знает
+слоя `routes`, поэтому для него слайсы, которые потребляют роуты, выглядят неиспользуемыми. Исключены
+`routeTree.gen.ts` и `server/`. Проектные исключения (например, `public-api` для папки со стилями)
+проект дописывает у себя после реэкспорта.
+
 ## Установка
 
 Пакет публичный, на npmjs.org: ставится без токенов — в CI, Docker, у dependabot и в форках.
@@ -77,6 +122,15 @@ npm i -D typescript @types/node
 
 # commitlint
 npm i -D @commitlint/cli @commitlint/config-conventional
+
+# ESLint: ставьте только то, что подключаете из фабрик
+npm i -D eslint typescript-eslint @stylistic/eslint-plugin           # base()
+npm i -D eslint-plugin-react-hooks                                    # react()
+npm i -D eslint-plugin-sonarjs                                        # sonar()
+npm i -D eslint-plugin-boundaries eslint-import-resolver-typescript   # fsd()
+
+# steiger
+npm i -D steiger @feature-sliced/steiger-plugin
 ```
 
 Например, фронтенд-проект на Biome и TypeScript ставит
@@ -89,6 +143,11 @@ npm i -D @commitlint/cli @commitlint/config-conventional
   `tsc` отвечает `Unknown compiler option`, на 5.6.3 конфиг `bundler.json` принимается. На 7.0.2
   `node.json` и `bundler.json` принимаются и ловят неиспользуемые переменные и неявный `any`.
 - `@commitlint/config-conventional` ≥ 20.
+- ESLint, steiger и их плагины: прогон проходил на ESLint 10.14, `typescript-eslint` 8.72,
+  `eslint-plugin-boundaries` 7.4, `eslint-plugin-sonarjs` 4.2, `eslint-plugin-react-hooks` 7.1,
+  `steiger` 0.9 и `@feature-sliced/steiger-plugin` 0.8. Нижние границы в `peerDependencies`
+  (ESLint ≥ 9, boundaries ≥ 7, steiger ≥ 0.5.13) взяты из версий в проектах автора, на них отдельного
+  прогона не было.
 
 Проекты автора работают на TypeScript `^5.9.3` и `^7.0.2`.
 
@@ -174,7 +233,8 @@ const key = createHash("md5").update(path).digest("hex")
 
 Новое правило приходит в минорной версии уровнем `info`, не блокируя коммиты и CI. Уровнем `error` —
 только в мажорной. `warn` для этого не годится: проекты гоняют линтер с `--error-on-warnings`, и
-`warn` блокирует наравне с `error`.
+`warn` блокирует наравне с `error`. У ESLint уровня `info` нет: правила фабрик первого выпуска пришли
+сразу `error`, а новые по плану будут приходить отдельным набором, который проект включает сам.
 Версию, `CHANGELOG.md`, тег `vX.Y.Z` и публикацию делает semantic-release в CI на пуше в `main`
 по conventional commits: `feat` — минорная, `fix` — патч, `feat!` / `BREAKING CHANGE` — мажорная.
 Новые правила и их уровень — в `CHANGELOG.md`.
