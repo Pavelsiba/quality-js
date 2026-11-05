@@ -13,18 +13,16 @@
   },
   "files": [
     "biome-manifest.json",
-    "configs",
-    "tsconfig",
-    "commitlint"
+    "configs"
   ],
   "exports": {
     ".": {
       "biome": "./biome-manifest.json"
     },
-    "./tsconfig/*": "./tsconfig/*",
+    "./tsconfig/*": "./configs/tsconfig/*",
     "./commitlint": {
-      "types": "./commitlint/index.d.ts",
-      "default": "./commitlint/index.js"
+      "types": "./configs/commitlint/index.d.ts",
+      "default": "./configs/commitlint/index.js"
     },
     "./package.json": "./package.json"
   },

@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Что это
 
 `@pavelsiba/quality-js` — пакет общих конфигов quality gates (Biome, tsconfig, commitlint)
-для TS/JS-проектов pavelsiba. Кода, кроме `commitlint/index.js`, нет: продукт — сами
+для TS/JS-проектов pavelsiba. Кода, кроме `configs/commitlint/index.js`, нет: продукт — сами
 конфиги. Проекты подключают их через `extends` и получают правки обновлением версии; ставит пакет в
 проекты скилл `quality-gates` из pavelsiba-skills (таблица sonarjs → Biome —
 `D:/Obsidian/pavelsiba-skills/quality-gates/sonarjs-biome.md`).
@@ -27,10 +27,14 @@ node --test --test-name-pattern="хук под условием" test/biome.test
 Lefthook (`npm install` ставит хуки): pre-commit — `biome check --write` по staged-файлам,
 markdownlint (только в хуке: ни в зависимостях, ни в CI его нет), а при правке `configs/**`,
 `biome-manifest.json`, `package.json`, `test/**` — тесты; commit-msg — commitlint из
-`commitlint/index.js`.
+`configs/commitlint/index.js`.
 
 ## Как устроено
 
+- **Все конфиги лежат в `configs/`** (`biome/`, `tsconfig/`, `commitlint/`), а публичные пути проектов
+  задают `exports` и манифест: `@pavelsiba/quality-js/tsconfig/node.json`, `…/commitlint`,
+  `…/configs/base`. Переезд файла внутри `configs/` не ломает потребителей, пока `exports` отдаёт
+  прежние имена.
 - **Biome-конфиги подключаются через манифест.** `package.json` → `exports["."].biome` указывает на
   `biome-manifest.json`, который отображает имена `base` / `react` на файлы в `configs/biome/`.
   Поэтому проект пишет `"extends": ["@pavelsiba/quality-js/configs/base"]`. Новый Biome-конфиг —
