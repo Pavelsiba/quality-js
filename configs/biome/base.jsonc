@@ -45,13 +45,13 @@
         "noAdjacentSpacesInRegex": "error",
         "noArguments": "error",
         "noExcessiveCognitiveComplexity": {
-          "level": "error",
+          "level": "warn",
           "options": {
             "maxAllowedComplexity": 15
           }
         },
         "noExcessiveLinesPerFunction": {
-          "level": "error",
+          "level": "warn",
           "options": {
             "maxLines": 80
           }
@@ -182,6 +182,9 @@
         "rules": {
           "complexity": {
             "noExcessiveLinesPerFunction": "off"
+          },
+          "suspicious": {
+            "noEmptyBlockStatements": "off"
           }
         }
       }

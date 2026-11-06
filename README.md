@@ -39,16 +39,36 @@ peer-зависимости, их проект ставит рядом (см. «
 
 - **Формат:** 2 пробела, строка до 120 символов, двойные кавычки, без `;` и висячих запятых.
 - **Правила:** `recommended` плюс правила Biome, закрывающие sonarjs: когнитивная сложность не выше 15,
-  функция не длиннее 80 строк (в `*.test.*` и `*.spec.*` — без лимита), `type` вместо `interface`,
-  запрет `any`, вложенных тернарников, `var`, `for…in`, пропущенных и сфокусированных тестов,
-  протокол `node:` в импортах.
+  функция не длиннее 80 строк (оба порога — `warn`; в `*.test.*` и `*.spec.*` лимит длины снят,
+  как и запрет пустых блоков), `type` вместо `interface`, запрет `any`, вложенных тернарников,
+  `var`, `for…in`, пропущенных и сфокусированных тестов, протокол `node:` в импортах.
 - **Плагины GritQL** (ниже): очевидные уязвимости Node и типичные ошибки в тестах.
 - **Git:** `.gitignore` проекта учитывается (`vcs.useIgnoreFile`), поэтому он должен быть в проекте.
+- **Отключение правил проектом.** Два правила `base` зависят от конвенций проекта; если они не
+  подходят, проект выключает их в своём `biome.json` после `extends`:
+  - `correctness/noUndeclaredDependencies` принимает алиас из `paths` в `tsconfig.json` за пакет:
+    при алиасах без префикса (`"*": ["./src/*"]`, импорт `shared/api/…`) каждый такой импорт
+    даёт `Dependency … isn't specified in package.json`. С алиасами слоёв правило выключают.
+  - `style/useConsistentTypeDefinitions` требует `type` вместо `interface`; в проекте с конвенцией
+    `interface IXxxProps` его выключают.
+
+  ```json
+  {
+    "extends": ["@pavelsiba/quality-js/configs/base"],
+    "linter": {
+      "rules": {
+        "correctness": { "noUndeclaredDependencies": "off" },
+        "style": { "useConsistentTypeDefinitions": "off" }
+      }
+    }
+  }
+  ```
 
 ### Biome: `configs/react`
 
 `useHookAtTopLevel`, `useExhaustiveDependencies`, `noUnusedImports` с безопасным автофиксом,
-`noUnknownAtRules`. Накладывается поверх `base`.
+`noUnknownAtRules`. Для `*.tsx` и `*.jsx` (кроме тестов) порог длины функции — 150 строк вместо 80:
+функции-компоненты часто длиннее. Накладывается поверх `base`.
 
 ### TypeScript
 

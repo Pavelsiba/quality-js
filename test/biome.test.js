@@ -42,6 +42,10 @@ const diagnostics = (dir, target) => {
 
 const lint = (dir, file) => new Set(diagnostics(dir, file).map((diagnostic) => diagnostic.category))
 
+const longFunctionRule = "lint/complexity/noExcessiveLinesPerFunction"
+const withBody = (name, lines) =>
+  `export function ${name}(): number {\n${"  console.info(1)\n".repeat(lines)}  return 0\n}\n`
+
 after(() => {
   for (const dir of projects) rmSync(dir, { recursive: true, force: true })
 })
@@ -58,6 +62,26 @@ describe("configs/base", () => {
 
   it("не трогает чистый код", () => {
     assert.deepEqual([...lint(dir, "src/clean.ts")], [])
+  })
+
+  it("пороги сложности — warn, не error", () => {
+    const found = diagnostics(dir, "src/complex.ts").filter(
+      (diagnostic) => diagnostic.category === "lint/complexity/noExcessiveCognitiveComplexity"
+    )
+    assert.equal(found.length, 1)
+    assert.equal(found[0].severity, "warning")
+  })
+
+  it("порог длины функции — 80 строк", () => {
+    writeFileSync(join(dir, "src", "long-ok.ts"), withBody("longOk", 70))
+    writeFileSync(join(dir, "src", "long-bad.ts"), withBody("longBad", 100))
+    assert.ok(!lint(dir, "src/long-ok.ts").has(longFunctionRule))
+    assert.ok(lint(dir, "src/long-bad.ts").has(longFunctionRule))
+  })
+
+  it("пустой блок: в коде — error, в тестах — разрешён", () => {
+    assert.ok(lint(dir, "src/empty-block.ts").has("lint/suspicious/noEmptyBlockStatements"))
+    assert.deepEqual([...lint(dir, "src/empty-block.test.ts")], [])
   })
 })
 
@@ -102,5 +126,20 @@ describe("configs/react", () => {
   it("ловит хук под условием", () => {
     const categories = lint(dir, "src/bad.tsx")
     assert.ok(categories.has("lint/correctness/useHookAtTopLevel"), [...categories].join(", "))
+  })
+
+  it("порог длины функции: 150 строк в tsx, 80 в ts, в тестах без лимита", () => {
+    writeFileSync(join(dir, "src", "long-ok.tsx"), withBody("longOk", 100))
+    writeFileSync(join(dir, "src", "long-bad.tsx"), withBody("longBad", 160))
+    writeFileSync(join(dir, "src", "long-bad.ts"), withBody("longBadTs", 100))
+    for (const name of ["long.test.tsx", "long.spec.tsx", "long.test.jsx", "long.spec.jsx"]) {
+      writeFileSync(join(dir, "src", name), withBody("longTest", 160))
+    }
+    assert.ok(!lint(dir, "src/long-ok.tsx").has(longFunctionRule))
+    assert.ok(lint(dir, "src/long-bad.tsx").has(longFunctionRule))
+    for (const name of ["long.test.tsx", "long.spec.tsx", "long.test.jsx", "long.spec.jsx"]) {
+      assert.ok(!lint(dir, `src/${name}`).has(longFunctionRule), name)
+    }
+    assert.ok(lint(dir, "src/long-bad.ts").has(longFunctionRule))
   })
 })

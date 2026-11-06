@@ -1,9 +1,9 @@
-// React поверх base: правила хуков и необъявленных переменных (из granch).
+// React поверх base: правила хуков, автофикс неиспользуемых импортов и CSS at-rules (из granch).
+// Функции в *.tsx и *.jsx (компоненты) — до 150 строк вместо 80 из base; тесты исключены: у них лимита нет.
 {
   "linter": {
     "rules": {
       "correctness": {
-        "noUndeclaredVariables": "error",
         "noUnusedImports": { "level": "error", "fix": "safe" },
         "useExhaustiveDependencies": "warn",
         "useHookAtTopLevel": "error"
@@ -12,5 +12,17 @@
         "noUnknownAtRules": "error"
       }
     }
-  }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.tsx", "**/*.jsx", "!**/*.test.*", "!**/*.spec.*"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveLinesPerFunction": { "level": "warn", "options": { "maxLines": 150 } }
+          }
+        }
+      }
+    }
+  ]
 }
