@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.5.1](https://github.com/Pavelsiba/quality-js/compare/v2.5.0...v2.5.1) (2026-11-06)
+
+### Исправления
+
+* **biome:** ослаблены правила base, дававшие ложные срабатывания на существующих проектах ([6a0fc14](https://github.com/Pavelsiba/quality-js/commit/6a0fc14e61d7775dc20e57ba4e531ec367418091)), closes [#3](https://github.com/Pavelsiba/quality-js/issues/3) [#4](https://github.com/Pavelsiba/quality-js/issues/4) [#1](https://github.com/Pavelsiba/quality-js/issues/1) [#2](https://github.com/Pavelsiba/quality-js/issues/2)
+
 ## [2.5.0](https://github.com/Pavelsiba/quality-js/compare/v2.4.0...v2.5.0) (2026-11-05)
 
 ### Новое
