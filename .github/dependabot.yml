@@ -20,6 +20,7 @@ updates:
       # v10 требует conventional-changelog-writer@9, а release-notes-generator тянет @8
       - dependency-name: conventional-changelog-conventionalcommits
         update-types: ["version-update:semver-major"]
-      # typescript-eslint принимает typescript <6.1.0: 7.x ломает установку
+      # @feature-sliced/filesystem (через steiger) требует typescript ^5.8.3, а typescript-eslint — <6.1.0:
+      # 6.x даёт битый lock-файл (npm ci), 7.x — ERESOLVE
       - dependency-name: typescript
-        versions: [">=7"]
+        versions: [">=6"]
