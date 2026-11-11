@@ -80,8 +80,12 @@ markdownlint (только в хуке: ни в зависимостях, ни �
   префиксу имени. Эталоны остаются нетронутыми.
 - **ESLint и steiger** (`configs/eslint/`, `configs/steiger/`; экспорты `…/eslint`, `…/steiger`): для
   проектов, которые остаются на ESLint. Фабрики `base()`, `react()`, `sonar({ typed })`,
-  `fsd({ src, serverLayers, clientFiles })` возвращают массивы flat-конфигов; типы — `index.d.ts`
-  рядом. Все плагины — опциональные peer-зависимости. `test/eslint.test.js` гоняет настоящие eslint и
+  `fsd({ src, serverLayers, clientFiles })`, `next()` возвращают массивы flat-конфигов; типы — `index.d.ts`
+  рядом. Все плагины — опциональные peer-зависимости. Новое правило ESLint-ветки в минорной версии
+  идёт в `next()` (`configs/eslint/next.js`, `warn`), не в `base()` / `react()`: у ESLint нет `info`, а `warn`
+  блокирует под `--max-warnings 0`; в мажорной переезжает в `base()` уровнем `error`. Таблица «Что
+  включено по веткам» в `AGENT-GUIDE.md` сверяется с конфигами `test/guide.test.js`: правишь порог или
+  уровень — правь таблицу. `test/eslint.test.js` гоняет настоящие eslint и
   steiger во временном проекте по фикстурам `test/fixtures/eslint/<имя>/` (в `fsd`-фикстурах строки
   `// ловит` — места нарушений границ); в проект подкладывается junction на
   `eslint-import-resolver-typescript`, в потребителе он стоит рядом с eslint. Подвохи:

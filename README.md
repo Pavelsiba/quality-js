@@ -117,16 +117,18 @@ peer-зависимости, их проект ставит рядом (см. «
 
 ### ESLint: `…/eslint`
 
-Для проектов, которые остаются на ESLint (Biome не запускает ESLint-плагины). Четыре фабрики, каждая
-возвращает массив flat-конфигов; проект собирает нужные:
+Для проектов, которые остаются на ESLint (Biome не запускает ESLint-плагины). Пять фабрик, каждая
+возвращает массив flat-конфигов; проект собирает нужные. Какие правила и пороги включены в ветках Biome
+и ESLint и чего в ESLint-ветке нет — таблица [«Что включено по веткам»](AGENT-GUIDE.md#что-включено-по-веткам):
 
 ```js
-import { base, fsd, react, sonar } from "@pavelsiba/quality-js/eslint"
+import { base, fsd, next, react, sonar } from "@pavelsiba/quality-js/eslint"
 
 export default [
   { ignores: [".output/**", "src/routeTree.gen.ts"] },
   ...base(),
   ...react(),
+  ...next(),
   ...sonar({ typed: Boolean(process.env.CI) }),
   ...fsd({ serverLayers: { services: ["clients", "db"], clients: ["db"], db: [] } })
 ]
@@ -135,6 +137,11 @@ export default [
 - **`base()`** — `typescript-eslint` recommended и стиль через `@stylistic`, те же правила, что у Biome:
   двойные кавычки, без `;` и висячих запятых, 2 пробела, `type` вместо `interface`, запрет `any`.
 - **`react()`** — `react-hooks/rules-of-hooks` (`error`) и `exhaustive-deps` (`warn`).
+- **`next()`** — новые правила, которых ещё нет в `base()` и `react()`; проект подключает набор сам, когда
+  готов (у ESLint нет уровня `info`, а `warn` блокирует под `--max-warnings 0`). Сейчас в нём (с 2.8.0)
+  `max-lines-per-function` (`warn`): аналог `noExcessiveLinesPerFunction` у Biome, 80 строк без пустых и
+  комментариев, в `*.tsx` и `*.jsx` — 150 (как в `react` у Biome), в `*.test.*` и `*.spec.*` не
+  проверяется. В мажорной версии правила переезжают в `base()` и `react()` уровнем `error`.
 - **`sonar({ typed })`** — рекомендованные правила `eslint-plugin-sonarjs` без тех, что стандарт не
   берёт (AWS, Vue, Angular, jQuery, Lodash, Cypress, chai, правила под helmet и express, подсказки вроде
   `todo-tag`) и без закрытых `tsc`, форматтером или gitleaks. Правилам с типами TS нужен
@@ -369,7 +376,8 @@ const key = createHash("md5").update(path).digest("hex")
 Новое правило приходит в минорной версии уровнем `info`, не блокируя коммиты и CI. Уровнем `error` —
 только в мажорной. `warn` для этого не годится: проекты гоняют линтер с `--error-on-warnings`, и
 `warn` блокирует наравне с `error`. У ESLint уровня `info` нет: правила фабрик первого выпуска пришли
-сразу `error`, а новые по плану будут приходить отдельным набором, который проект включает сам.
+сразу `error`, а новые приходят набором `next()` (уровень `warn`), который проект включает сам; в
+мажорной версии они переезжают в `base()` / `react()` уровнем `error`.
 Версию, `CHANGELOG.md`, тег `vX.Y.Z` и публикацию делает semantic-release в CI на пуше в `main`
 по conventional commits: `feat` — минорная, `fix` — патч, `feat!` / `BREAKING CHANGE` — мажорная.
 Новые правила и их уровень — в `CHANGELOG.md`.

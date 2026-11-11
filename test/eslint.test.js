@@ -66,6 +66,10 @@ const expectedLines = (dir, files) =>
       .flatMap((text, index) => (text.includes("// ловит") ? [{ file, line: index + 1 }] : []))
   )
 
+// функция в `lines + 3` строк: сигнатура, `lines` вызовов, return, закрывающая скобка
+const withBody = (name, lines) =>
+  `export function ${name}(): number {\n${"  console.info(1)\n".repeat(lines)}  return 0\n}\n`
+
 const sortByPlace = (items) => items.map(({ file, line }) => `${file}:${line}`).sort()
 
 after(() => {
@@ -94,6 +98,47 @@ describe("eslint: base()", () => {
 
   it("не трогает чистый код", () => {
     assert.deepEqual(lint(dir, "clean.ts"), [])
+  })
+
+  it("не включает новые правила: длина функции приходит в next()", () => {
+    writeFileSync(join(dir, "long.ts"), withBody("f", 200))
+    assert.deepEqual(
+      lint(dir, "long.ts", (ruleId) => ruleId === "max-lines-per-function"),
+      []
+    )
+  })
+})
+
+describe("eslint: next()", () => {
+  const dir = makeProject(
+    "base",
+    "eslint.config.js",
+    `import { base, next, react } from "@pavelsiba/quality-js/eslint"\nexport default [...base(), ...react(), ...next()]\n`
+  )
+
+  it("длина функции: 80 строк в коде проходит, 81 — warn, в тестах не проверяется", () => {
+    for (const [file, lines] of [
+      ["long-ok.ts", 77],
+      ["long-bad.ts", 78],
+      ["long.test.ts", 200],
+      ["long.spec.ts", 200]
+    ]) {
+      writeFileSync(join(dir, file), withBody("f", lines))
+    }
+    const found = lint(dir, ".", (ruleId) => ruleId === "max-lines-per-function")
+    assert.deepEqual(sortByPlace(found), ["long-bad.ts:1"])
+  })
+
+  it("длина функции в .tsx: 150 строк проходит, 151 — warn, в тестах не проверяется", () => {
+    for (const [file, lines] of [
+      ["long-ok.tsx", 147],
+      ["long-bad.tsx", 148],
+      ["long.test.tsx", 300]
+    ]) {
+      writeFileSync(join(dir, file), withBody("f", lines))
+    }
+    const found = lint(dir, ".", (ruleId) => ruleId === "max-lines-per-function")
+    assert.deepEqual(sortByPlace(found.filter(({ file }) => file.endsWith(".tsx"))), ["long-bad.tsx:1"])
   })
 })
 

@@ -15,6 +15,8 @@ export type SonarOptions = {
 }
 
 export function base(): Linter.Config[]
+/** Новые правила, ещё не включённые в `base()` / `react()`: проект подключает сам (уровень `warn`). */
+export function next(): Linter.Config[]
 export function react(): Linter.Config[]
 export function sonar(options?: SonarOptions): Linter.Config[]
 export function fsd(options?: FsdOptions): Linter.Config[]

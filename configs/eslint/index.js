@@ -2,5 +2,6 @@
 //   export default [...base(), ...react(), ...sonar({ typed: Boolean(process.env.CI) }), ...fsd()]
 export { base } from "./base.js"
 export { fsd } from "./fsd.js"
+export { next } from "./next.js"
 export { react } from "./react.js"
 export { sonar } from "./sonar.js"
