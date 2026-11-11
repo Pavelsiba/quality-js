@@ -1,5 +1,15 @@
 # Changelog
 
+## [2.6.0](https://github.com/Pavelsiba/quality-js/compare/v2.5.1...v2.6.0) (2026-11-11)
+
+### Новое
+
+* **biome:** добавлены конфиги css и tailwind, подключаемые отдельно от base ([3f9a372](https://github.com/Pavelsiba/quality-js/commit/3f9a372324fa8a11b8c35a7ecf77bb41bc7122f2))
+
+### Исправления
+
+* lib в tsconfig bundler поднят до ESNext, peer conventionalcommits сужен до <10 ([64ee6fb](https://github.com/Pavelsiba/quality-js/commit/64ee6fbe77c9c387516f42251eb0f5f615ccc674)), closes [#8](https://github.com/Pavelsiba/quality-js/issues/8) [#10](https://github.com/Pavelsiba/quality-js/issues/10) [#11](https://github.com/Pavelsiba/quality-js/issues/11)
+
 ## [2.5.1](https://github.com/Pavelsiba/quality-js/compare/v2.5.0...v2.5.1) (2026-11-06)
 
 ### Исправления

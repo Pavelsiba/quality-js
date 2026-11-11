@@ -1,6 +1,6 @@
 {
   "name": "@pavelsiba/quality-js",
-  "version": "2.5.1",
+  "version": "2.6.0",
   "description": "Общие конфиги quality gates для TS/JS-проектов: Biome, tsconfig, commitlint.",
   "license": "MIT",
   "type": "module",
