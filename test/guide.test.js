@@ -109,6 +109,8 @@ describe("AGENT-GUIDE.md: «Что включено по веткам»", () => 
 
     it("правила безопасности, секретов и тестов из таблицы включены уровнем error", () => {
       const names = [
+        "slow-regex",
+        "super-linear-regex",
         "code-eval",
         "hashing",
         "weak-ssl",

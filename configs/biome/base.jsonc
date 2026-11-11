@@ -163,7 +163,9 @@
     { "path": "./plugins/synchronous-suite-callback.grit", "resolutionKind": "config" },
     { "path": "./plugins/test-check-exception.grit", "resolutionKind": "config" },
     { "path": "./plugins/prefer-specific-assertions.grit", "resolutionKind": "config" },
-    { "path": "./plugins/no-interpolation-in-inline-snapshots.grit", "resolutionKind": "config" }
+    { "path": "./plugins/no-interpolation-in-inline-snapshots.grit", "resolutionKind": "config" },
+    { "path": "./plugins/slow-regex.grit", "resolutionKind": "config" },
+    { "path": "./plugins/super-linear-regex.grit", "resolutionKind": "config" }
   ],
   "overrides": [
     {

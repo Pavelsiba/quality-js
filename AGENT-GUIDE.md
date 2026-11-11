@@ -92,7 +92,7 @@ security:
 - Новые правила приходят уровнем **`info`**, `error` — только в мажорной версии. Линтер гоняйте с
   `--error-on-warnings`: `warn` блокирует наравне с `error`, поэтому он оставлен лишь для порогов
   (сложность ≤ 15, функция ≤ 80 строк) и nursery.
-- Плагины GritQL (27 штук, безопасность Node и тесты Vitest) тоже `info`. Имя правила — в начале
+- Плагины GritQL (29 штук, безопасность Node, тесты Vitest и ReDoS в регулярках) тоже `info`. Имя правила — в начале
   сообщения; гасится так: `// biome-ignore lint/plugin/<имя>: причина`.
 - Три правила зависят от конвенций проекта и выключаются в `biome.json` **после** `extends`:
   `correctness/noUndeclaredDependencies` (алиасы без префикса: `shared/api/…`),
@@ -139,16 +139,17 @@ security:
 подключённом `sonar()`, длина функции — только при подключённом `next()`; без них ESLint-ветка эти
 области не проверяет. `warn` блокирует под `--error-on-warnings` / `--max-warnings 0` наравне с `error`.
 
-| Область                  | Biome (`configs/base`)                                                           | ESLint (`base()`, `sonar()`, `next()`)                                                              |
-| ------------------------ | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| Когнитивная сложность    | `noExcessiveCognitiveComplexity` ≤ 15, `warn`                                    | `sonarjs/cognitive-complexity` ≤ 15, `error`                                                        |
-| Длина функции            | `noExcessiveLinesPerFunction` ≤ 80, `warn`; `*.tsx` / `*.jsx` с `react` — 150    | `max-lines-per-function` ≤ 80, `warn`; `*.tsx` / `*.jsx` — 150; только `next()`                     |
-| Вложенные функции        | `noExcessiveNestedCallbacks` ≤ 5, `warn`                                         | `sonarjs/no-nested-functions` ≤ 5, `error`                                                          |
-| Вложенный тернарник      | `noNestedTernary`, `error`                                                       | `sonarjs/no-nested-conditional`, `error`                                                            |
-| Сложность регулярки      | нет                                                                              | `sonarjs/regex-complexity` ≤ 20, `error`                                                            |
-| Безопасность Node        | `noGlobalEval`, `error`; плагины GritQL (хеши, шифры, TLS, cookie, CORS), `info` | `sonarjs/code-eval`, `hashing`, `weak-ssl`, `insecure-cookie`, `cors` и др., `error`                |
-| Секреты, пароли, SQL, IP | нет (секреты ловит gitleaks из `security.yml`)                                   | `sonarjs/no-hardcoded-secrets`, `no-hardcoded-passwords`, `sql-queries`, `no-hardcoded-ip`, `error` |
-| Тесты                    | `noFocusedTests`, `noSkippedTests`, `error`; плагины GritQL (ассерты), `info`    | `sonarjs/no-exclusive-tests`, `no-skipped-tests`, `assertions-in-tests` и др., `error`              |
+| Область                  | Biome (`configs/base`)                                                            | ESLint (`base()`, `sonar()`, `next()`)                                                              |
+| ------------------------ | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Когнитивная сложность    | `noExcessiveCognitiveComplexity` ≤ 15, `warn`                                     | `sonarjs/cognitive-complexity` ≤ 15, `error`                                                        |
+| Длина функции            | `noExcessiveLinesPerFunction` ≤ 80, `warn`; `*.tsx` / `*.jsx` с `react` — 150     | `max-lines-per-function` ≤ 80, `warn`; `*.tsx` / `*.jsx` — 150; только `next()`                     |
+| Вложенные функции        | `noExcessiveNestedCallbacks` ≤ 5, `warn`                                          | `sonarjs/no-nested-functions` ≤ 5, `error`                                                          |
+| Вложенный тернарник      | `noNestedTernary`, `error`                                                        | `sonarjs/no-nested-conditional`, `error`                                                            |
+| Сложность регулярки      | нет                                                                               | `sonarjs/regex-complexity` ≤ 20, `error`                                                            |
+| Безопасность Node        | `noGlobalEval`, `error`; плагины GritQL (хеши, шифры, TLS, cookie, CORS), `info`  | `sonarjs/code-eval`, `hashing`, `weak-ssl`, `insecure-cookie`, `cors` и др., `error`                |
+| ReDoS в регулярках       | плагины GritQL `slow-regex`, `super-linear-regex`, `info` (эвристика по литералу) | `sonarjs/slow-regex` (нужен `typed: true`), `sonarjs/super-linear-regex`, `error`                   |
+| Секреты, пароли, SQL, IP | нет (секреты ловит gitleaks из `security.yml`)                                    | `sonarjs/no-hardcoded-secrets`, `no-hardcoded-passwords`, `sql-queries`, `no-hardcoded-ip`, `error` |
+| Тесты                    | `noFocusedTests`, `noSkippedTests`, `error`; плагины GritQL (ассерты), `info`     | `sonarjs/no-exclusive-tests`, `no-skipped-tests`, `assertions-in-tests` и др., `error`              |
 
 Пороги ESLint-колонки — умолчания плагина `eslint-plugin-sonarjs`, в конфиге они не заданы. Таблица
 сверяется с конфигами тестом `test/guide.test.js`: порог или уровень разошёлся — тест падает.

@@ -1,0 +1,14 @@
+export const a = /(a+)+$/u // ловит
+export const b = /^([a-z]+\s*)*$/u // ловит
+export const c = /(a|b+)*c/u // ловит
+export const d = /(a+|b)+c/u // ловит
+export const e = /(?:\w+)*x/u // ловит
+export const f = /(\d+){2,}/u // ловит
+export const slug = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u
+export const name = /^[A-Za-z]+(?:[\s'-][A-Za-z]+)*$/u
+export const host = /(?:[a-z0-9]+[.])+[a-z]+/u
+export const optional = /(a+)?b/u
+export const bounded = /(\d{3})+/u
+export const escaped = /\(a+\)+/u
+export const inClass = /([+-]|a)*/u
+export const plain = /a+b+/u
