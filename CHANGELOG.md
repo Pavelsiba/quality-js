@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.9.0](https://github.com/Pavelsiba/quality-js/compare/v2.8.0...v2.9.0) (2026-11-11)
+
+### Новое
+
+* **biome:** добавлены плагины slow-regex и super-linear-regex для ReDoS в регулярках ([f24a5bf](https://github.com/Pavelsiba/quality-js/commit/f24a5bfecac71b2e31d547b123a8053ead8819c2))
+
 ## [2.8.0](https://github.com/Pavelsiba/quality-js/compare/v2.7.1...v2.8.0) (2026-11-11)
 
 ### Новое
