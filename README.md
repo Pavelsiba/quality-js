@@ -44,7 +44,7 @@ peer-зависимости, их проект ставит рядом (см. «
   `var`, `for…in`, пропущенных и сфокусированных тестов, протокол `node:` в импортах.
 - **Плагины GritQL** (ниже): очевидные уязвимости Node и типичные ошибки в тестах.
 - **Git:** `.gitignore` проекта учитывается (`vcs.useIgnoreFile`), поэтому он должен быть в проекте.
-- **Отключение правил проектом.** Два правила `base` зависят от конвенций проекта; если они не
+- **Отключение правил проектом.** Три правила `base` зависят от конвенций проекта; если они не
   подходят, проект выключает их в своём `biome.json` после `extends`:
   - `correctness/noUndeclaredDependencies` принимает алиас из `paths` в `tsconfig.json` за пакет:
     при алиасах без префикса (`"*": ["./src/*"]`, импорт `shared/api/…`) каждый такой импорт
@@ -61,6 +61,21 @@ peer-зависимости, их проект ставит рядом (см. «
         "style": { "useConsistentTypeDefinitions": "off" }
       }
     }
+  }
+  ```
+
+  - `complexity/noExcessiveCognitiveComplexity` завышает оценку каррированных обёрток вроде
+    Redux-middleware `(store) => (next) => (action) => {…}`: три вложенные функции удорожают всё, что
+    внутри. Правило выключают только для таких файлов через `overrides`, а не для проекта целиком:
+
+  ```json
+  {
+    "overrides": [
+      {
+        "includes": ["src/**/*middleware*"],
+        "linter": { "rules": { "complexity": { "noExcessiveCognitiveComplexity": "off" } } }
+      }
+    ]
   }
   ```
 
@@ -199,8 +214,12 @@ npm i -D eslint-plugin-boundaries eslint-import-resolver-typescript   # fsd()
 npm i -D steiger @feature-sliced/steiger-plugin
 
 # semantic-release
-npm i -D semantic-release @semantic-release/changelog @semantic-release/git conventional-changelog-conventionalcommits
+npm i -D semantic-release @semantic-release/changelog @semantic-release/git conventional-changelog-conventionalcommits@9
 ```
+
+Пресет `conventional-changelog-conventionalcommits` — версии 9: пресет 10 требует
+`conventional-changelog-writer` 9, а актуальный `@semantic-release/release-notes-generator` 14 берёт
+writer 8, и релиз падает на заметках. Диапазон расширится, когда генератор в `latest` получит writer 9.
 
 Например, фронтенд-проект на Biome и TypeScript ставит
 `npm i -D @pavelsiba/quality-js @biomejs/biome typescript`; commitlint и `@types/node` ему не нужны.
@@ -307,5 +326,9 @@ const key = createHash("md5").update(path).digest("hex")
 Версию, `CHANGELOG.md`, тег `vX.Y.Z` и публикацию делает semantic-release в CI на пуше в `main`
 по conventional commits: `feat` — минорная, `fix` — патч, `feat!` / `BREAKING CHANGE` — мажорная.
 Новые правила и их уровень — в `CHANGELOG.md`.
+
+После обновления пакета прогоните `lint:fix` и закоммитьте результат отдельным коммитом: автофиксы
+новых и ужесточённых правил (например, флаг `u` у регулярных выражений от `useUnicodeRegex`) правят
+много файлов, и в общий коммит они не должны попадать.
 
 Пакет распространяется под лицензией MIT.
