@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.7.1](https://github.com/Pavelsiba/quality-js/compare/v2.7.0...v2.7.1) (2026-11-11)
+
+### Исправления
+
+* в README указана версия 2.7.1, с которой AGENT-GUIDE.md входит в пакет ([1b95e83](https://github.com/Pavelsiba/quality-js/commit/1b95e832403178c10862d419a8b38f088f62d3cf))
+
 ## [2.7.0](https://github.com/Pavelsiba/quality-js/compare/v2.6.0...v2.7.0) (2026-11-11)
 
 ### Новое
