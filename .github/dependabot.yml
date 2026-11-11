@@ -20,3 +20,6 @@ updates:
       # v10 требует conventional-changelog-writer@9, а release-notes-generator тянет @8
       - dependency-name: conventional-changelog-conventionalcommits
         update-types: ["version-update:semver-major"]
+      # typescript-eslint принимает typescript <6.1.0: 7.x ломает установку
+      - dependency-name: typescript
+        versions: [">=7"]
