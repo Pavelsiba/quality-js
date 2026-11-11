@@ -1,0 +1,19 @@
+.card .title {
+  color: red;
+}
+
+.title {
+  color: blue;
+}
+
+.box {
+  margin: 0;
+}
+
+.box {
+  padding: 0;
+}
+
+.flag {
+  color: red !important;
+}

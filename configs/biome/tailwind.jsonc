@@ -1,0 +1,7 @@
+// Tailwind 4 поверх base: парсер CSS понимает `@theme`, `@utility`, `@variant`, `@source`, `@apply`.
+// Подключается только в проектах с Tailwind; без него такие файлы дают ошибки разбора.
+{
+  "css": {
+    "parser": { "tailwindDirectives": true }
+  }
+}

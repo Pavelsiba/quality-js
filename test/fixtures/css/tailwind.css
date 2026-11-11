@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #123456;
+}
+
+@utility tab-4 {
+  tab-size: 4;
+}
+
+.btn {
+  @apply font-bold;
+}

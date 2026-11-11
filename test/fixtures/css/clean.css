@@ -1,0 +1,7 @@
+.card {
+  color: red;
+}
+
+.card .title {
+  margin: 0;
+}

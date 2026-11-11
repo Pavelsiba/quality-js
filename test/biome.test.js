@@ -143,3 +143,30 @@ describe("configs/react", () => {
     assert.ok(lint(dir, "src/long-bad.ts").has(longFunctionRule))
   })
 })
+
+describe("configs/css", () => {
+  const dir = makeProject("css", ["base", "css"])
+  const withTailwind = makeProject("css", ["base", "css", "tailwind"])
+
+  it("ловит дубли селекторов, падение специфичности и !important как info", () => {
+    const found = diagnostics(dir, "src/bad.css")
+    const categories = new Set(found.map((diagnostic) => diagnostic.category))
+    for (const rule of [
+      "style/noDescendingSpecificity",
+      "suspicious/noDuplicateSelectors",
+      "complexity/noImportantStyles"
+    ]) {
+      assert.ok(categories.has(`lint/${rule}`), `нет ${rule}, есть: ${[...categories].join(", ")}`)
+    }
+    assert.ok(found.every((diagnostic) => diagnostic.severity === "info"))
+  })
+
+  it("не трогает чистый CSS", () => {
+    assert.deepEqual([...lint(dir, "src/clean.css")], [])
+  })
+
+  it("директивы Tailwind 4 разбираются только с конфигом tailwind", () => {
+    assert.notDeepEqual([...lint(dir, "src/tailwind.css")], [])
+    assert.deepEqual([...lint(withTailwind, "src/tailwind.css")], [])
+  })
+})

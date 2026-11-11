@@ -1,4 +1,9 @@
 {
   "version": 1,
-  "configs": [{ "base": "./configs/biome/base.jsonc" }, { "react": "./configs/biome/react.jsonc" }]
+  "configs": [
+    { "base": "./configs/biome/base.jsonc" },
+    { "react": "./configs/biome/react.jsonc" },
+    { "css": "./configs/biome/css.jsonc" },
+    { "tailwind": "./configs/biome/tailwind.jsonc" }
+  ]
 }

@@ -1,0 +1,23 @@
+// CSS поверх base, подключается отдельно: `"extends": ["@pavelsiba/quality-js/configs/base", "@pavelsiba/quality-js/configs/css"]`.
+// Директивы Tailwind 4 — отдельный конфиг `tailwind`; CSS Modules Biome включает сам для `*.module.css`.
+// Формат (отступы, ширина строки, кавычки) CSS наследует от base.
+// Правила сверх recommended пришли новыми, поэтому `info`, как и все новые правила набора.
+{
+  "css": {
+    "formatter": { "enabled": true },
+    "linter": { "enabled": true }
+  },
+  "linter": {
+    "rules": {
+      "complexity": {
+        "noImportantStyles": "info"
+      },
+      "style": {
+        "noDescendingSpecificity": "info"
+      },
+      "suspicious": {
+        "noDuplicateSelectors": "info"
+      }
+    }
+  }
+}

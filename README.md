@@ -85,6 +85,20 @@ peer-зависимости, их проект ставит рядом (см. «
 `noUnknownAtRules`. Для `*.tsx` и `*.jsx` (кроме тестов) порог длины функции — 150 строк вместо 80:
 функции-компоненты часто длиннее. Накладывается поверх `base`.
 
+### Biome: `configs/css`
+
+Подключается отдельно, поверх `base`:
+`"extends": ["@pavelsiba/quality-js/configs/base", "@pavelsiba/quality-js/configs/css"]`. Форматтер
+и линтер CSS включены; CSS Modules Biome включает сам для `*.module.css`. Сверх `recommended` —
+три правила уровнем `info`: `noDuplicateSelectors`, `noDescendingSpecificity`,
+`noImportantStyles`. Отступы, ширину строки и кавычки CSS берёт из `base`.
+
+### Biome: `configs/tailwind`
+
+Только для проектов с Tailwind 4: парсер CSS понимает `@theme`, `@utility`, `@variant`, `@source`,
+`@apply`. Без этого конфига такие файлы дают ошибки разбора. Подключается рядом с `css`:
+`"extends": [".../configs/base", ".../configs/css", ".../configs/tailwind"]`.
+
 ### TypeScript
 
 Оба конфига расширяют `tsconfig/base.json`: `strict`, `noUnusedLocals`, `noUnusedParameters`,
