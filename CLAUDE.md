@@ -99,6 +99,11 @@ markdownlint (только в хуке: ни в зависимостях, ни �
   (в проекте они стоят рядом с `semantic-release`). `test/release.test.js` проверяет экспорт, форму и
   разрешение плагинов без сети: настоящий `semantic-release --dry-run` требует токен GitHub (проба
   2026-11-05 дошла до `verifyConditions` у `@semantic-release/github` и упала на фиктивном токене).
+- **Хуки lefthook** (`configs/lefthook/base.yml` — biome и commitlint, `security.yml` — gitleaks,
+  actionlint, zizmor): проект подключает через `extends: [node_modules/@pavelsiba/quality-js/configs/lefthook/…]`
+  (lefthook не читает `exports`, путь физический). Джоб с общим именем проект не перекрывает: при
+  совпадении имён побеждает `extends` (lefthook 2.2.2, проверено `test/lefthook.test.js`). Репозиторий
+  сам на них не переведён: его `lefthook.yml` содержит тот же biome, но с `markdown` и `test`.
 - **Переиспользуемый workflow** `.github/workflows/security.yml` (`workflow_call`, вход `audit`): gitleaks,
   actionlint + zizmor, `npm audit --omit=dev`; сканеры запускаются напрямую, скрипты проекта не нужны.
   Не входит в `files` пакета: проект зовёт его `uses: Pavelsiba/quality-js/.github/workflows/security.yml@<sha>`.

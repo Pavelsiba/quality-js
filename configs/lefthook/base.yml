@@ -1,0 +1,29 @@
+# Общие хуки lefthook: форматтер/линтер Biome по staged-файлам и проверка сообщения коммита.
+# Подключение в lefthook.yml проекта:
+#   extends:
+#     - node_modules/@pavelsiba/quality-js/configs/lefthook/base.yml
+# Проект дописывает свои джобы рядом под другими именами. Джоб с именем из этого файла (`biome`,
+# `commitlint`) lefthook 2.2.2 не перекрывает: при совпадении имён побеждает `extends`, а не проект.
+
+# Без рамки-баннера и цветов: вывод хуков читает и агент, ANSI-градиенты там — шум.
+colors: false
+output:
+  - summary
+  - failure
+  - execution_out
+
+pre-commit:
+  parallel: true
+  jobs:
+    # --error-on-warnings: проекты гоняют линтер так же, как CI. --no-errors-on-unmatched и
+    # --files-ignore-unknown нужны потому, что в {staged_files} попадают файлы вне области
+    # biome.json (доки, ямлы): без них хук падал бы на каждом коммите, не трогающем код.
+    - name: biome
+      glob: "*.{js,mjs,cjs,jsx,ts,mts,cts,tsx,json,jsonc,css}"
+      run: npx biome check --write --error-on-warnings --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  jobs:
+    - name: commitlint
+      run: npx commitlint --edit {1}

@@ -1,0 +1,20 @@
+# Хуки безопасности: те же сканеры, что в переиспользуемом .github/workflows/security.yml.
+# Бинарники gitleaks, actionlint и zizmor ставятся в систему (не через npm); без них хук падает,
+# поэтому файл подключается отдельно от base.yml:
+#   extends:
+#     - node_modules/@pavelsiba/quality-js/configs/lefthook/base.yml
+#     - node_modules/@pavelsiba/quality-js/configs/lefthook/security.yml
+# Версии держите теми же, что в `env` security.yml, иначе находки локально и в CI разойдутся.
+
+pre-commit:
+  jobs:
+    # Секреты — до того, как попадут в историю. Смотрит только индекс, поэтому быстро и всегда.
+    # --redact обязателен: без него находка печатается в терминал целиком.
+    - name: secrets
+      run: gitleaks git --pre-commit --staged --redact --verbose --no-banner
+
+    # actionlint — корректность workflow (ключи, выражения, shellcheck по run:), zizmor — их
+    # безопасность (права, креды, триггеры). Пересекаются слабо.
+    - name: workflows
+      glob: ".github/**/*.{yml,yaml}"
+      run: actionlint && zizmor --no-progress .github

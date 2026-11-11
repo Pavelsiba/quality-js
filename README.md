@@ -23,17 +23,18 @@
 Части независимы: подключайте только нужные. Пакет ничего не ставит сам, все инструменты — опциональные
 peer-зависимости, их проект ставит рядом (см. «Установка»).
 
-| Часть                 | Подключение                                                                          | Что даёт                                                                               |
-| --------------------- | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| Biome                 | `biome.json`: `"extends": ["@pavelsiba/quality-js/configs/base"]`                    | Формат, линтер, сортировка импортов, встроенные аналоги sonarjs и плагины безопасности |
-| Biome React           | `… "@pavelsiba/quality-js/configs/react"` — после `base`                             | Правила хуков React                                                                    |
-| TypeScript            | `tsconfig.json`: `"extends": "@pavelsiba/quality-js/tsconfig/node.json"`             | Строгая проверка типов для Node: NodeNext, ES2023                                      |
-| TypeScript            | `… "@pavelsiba/quality-js/tsconfig/bundler.json"`                                    | То же для фронтенда: bundler, DOM, react-jsx                                           |
-| commitlint            | `commitlint.config.js`: `export { default } from "@pavelsiba/quality-js/commitlint"` | Conventional Commits, описание коммита по-русски                                       |
-| ESLint                | `eslint.config.js`: `[...base(), ...react(), ...sonar(), ...fsd()]` из `…/eslint`    | Для проектов на ESLint: стиль, хуки React, sonarjs, границы слоёв FSD                  |
-| steiger               | `steiger.config.js`: `export { default } from "@pavelsiba/quality-js/steiger"`       | Линтер архитектуры FSD с исключениями под файловый роутинг TanStack                    |
-| semantic-release      | `.releaserc.json`: `"extends": "@pavelsiba/quality-js/release"`                      | Релиз по Conventional Commits: версия, `CHANGELOG.md`, тег `vX.Y.Z`, GitHub, npmjs     |
-| Workflow безопасности | `uses: Pavelsiba/quality-js/.github/workflows/security.yml@<sha>`                    | gitleaks по истории, actionlint + zizmor, аудит зависимостей                           |
+| Часть                 | Подключение                                                                               | Что даёт                                                                               |
+| --------------------- | ----------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Biome                 | `biome.json`: `"extends": ["@pavelsiba/quality-js/configs/base"]`                         | Формат, линтер, сортировка импортов, встроенные аналоги sonarjs и плагины безопасности |
+| Biome React           | `… "@pavelsiba/quality-js/configs/react"` — после `base`                                  | Правила хуков React                                                                    |
+| TypeScript            | `tsconfig.json`: `"extends": "@pavelsiba/quality-js/tsconfig/node.json"`                  | Строгая проверка типов для Node: NodeNext, ES2023                                      |
+| TypeScript            | `… "@pavelsiba/quality-js/tsconfig/bundler.json"`                                         | То же для фронтенда: bundler, DOM, react-jsx                                           |
+| commitlint            | `commitlint.config.js`: `export { default } from "@pavelsiba/quality-js/commitlint"`      | Conventional Commits, описание коммита по-русски                                       |
+| ESLint                | `eslint.config.js`: `[...base(), ...react(), ...sonar(), ...fsd()]` из `…/eslint`         | Для проектов на ESLint: стиль, хуки React, sonarjs, границы слоёв FSD                  |
+| steiger               | `steiger.config.js`: `export { default } from "@pavelsiba/quality-js/steiger"`            | Линтер архитектуры FSD с исключениями под файловый роутинг TanStack                    |
+| semantic-release      | `.releaserc.json`: `"extends": "@pavelsiba/quality-js/release"`                           | Релиз по Conventional Commits: версия, `CHANGELOG.md`, тег `vX.Y.Z`, GitHub, npmjs     |
+| Workflow безопасности | `uses: Pavelsiba/quality-js/.github/workflows/security.yml@<sha>`                         | gitleaks по истории, actionlint + zizmor, аудит зависимостей                           |
+| Хуки lefthook         | `lefthook.yml`: `extends: [node_modules/@pavelsiba/quality-js/configs/lefthook/base.yml]` | Biome по staged-файлам, commitlint; `security.yml` — gitleaks, actionlint, zizmor      |
 
 ### Biome: `configs/base`
 
@@ -197,6 +198,35 @@ jobs:
 ```
 
 Ссылку на `<sha>` обновляет Dependabot (`github-actions`).
+
+### Хуки lefthook
+
+Два файла в `configs/lefthook/`; подключаются через `extends` в `lefthook.yml` проекта. lefthook не
+читает `exports`, поэтому путь физический, от корня проекта:
+
+```yaml
+extends:
+  - node_modules/@pavelsiba/quality-js/configs/lefthook/base.yml
+  - node_modules/@pavelsiba/quality-js/configs/lefthook/security.yml # по желанию
+
+pre-commit:
+  jobs:
+    - name: typecheck # свои джобы — рядом, под другими именами
+      glob: "*.ts"
+      run: npm run typecheck
+```
+
+- `base.yml` — без цветов и баннеров; `pre-commit`: `biome check --write --error-on-warnings` по
+  staged-файлам с авто-добавлением правок; `commit-msg`: `commitlint --edit` (нужны `@biomejs/biome`,
+  `@commitlint/cli` и `commitlint.config.js` проекта).
+- `security.yml` — `pre-commit`: `gitleaks git --pre-commit --staged --redact` и
+  `actionlint && zizmor` по `.github/**`. Это те же сканеры, что в workflow выше, но бинарники
+  gitleaks, actionlint и zizmor проект ставит в систему сам (winget, brew), поэтому файл отдельный.
+  Версии держите теми же, что в `env` `security.yml`.
+- Джоб с именем из этих файлов (`biome`, `commitlint`, `secrets`, `workflows`) проект не
+  переопределяет: при совпадении имён побеждает `extends` (проверено на lefthook 2.2.2). Нужен другой
+  `biome` — не подключайте `base.yml`.
+- Typecheck, тесты, knip и markdownlint в общий файл не входят: набор зависит от проекта.
 
 ## Установка
 
