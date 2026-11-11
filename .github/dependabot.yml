@@ -16,3 +16,7 @@ updates:
       default-days: 7
     commit-message:
       prefix: chore
+    ignore:
+      # v10 требует conventional-changelog-writer@9, а release-notes-generator тянет @8
+      - dependency-name: conventional-changelog-conventionalcommits
+        update-types: ["version-update:semver-major"]
