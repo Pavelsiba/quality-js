@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.8.0](https://github.com/Pavelsiba/quality-js/compare/v2.7.1...v2.8.0) (2026-11-11)
+
+### Новое
+
+* **eslint:** добавлен набор next() с лимитом длины функции, в AGENT-GUIDE описаны правила по веткам ([49dcedb](https://github.com/Pavelsiba/quality-js/commit/49dcedb7bf75ab2e91a251e6967c2bd3b8e4f699)), closes [#13](https://github.com/Pavelsiba/quality-js/issues/13) [#14](https://github.com/Pavelsiba/quality-js/issues/14)
+
 ## [2.7.1](https://github.com/Pavelsiba/quality-js/compare/v2.7.0...v2.7.1) (2026-11-11)
 
 ### Исправления
