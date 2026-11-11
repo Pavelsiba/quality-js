@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.7.0](https://github.com/Pavelsiba/quality-js/compare/v2.6.0...v2.7.0) (2026-11-11)
+
+### Новое
+
+* **lefthook:** добавлены общие хуки base.yml и security.yml, подключаемые через extends ([fd8be63](https://github.com/Pavelsiba/quality-js/commit/fd8be63df5cd4581b6f013ebb0cf38fcd05d8555))
+
 ## [2.6.0](https://github.com/Pavelsiba/quality-js/compare/v2.5.1...v2.6.0) (2026-11-11)
 
 ### Новое
