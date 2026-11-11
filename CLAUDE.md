@@ -10,6 +10,10 @@ commitlint) для TS/JS-проектов pavelsiba. Кода, кроме `confi
 проекты скилл `quality-gates` из pavelsiba-skills (таблица sonarjs → Biome —
 `D:/Obsidian/pavelsiba-skills/quality-gates/sonarjs-biome.md`).
 
+`AGENT-GUIDE.md` (в `files` пакета) — памятка агенту-потребителю: что подключить, рецепт, нюансы.
+Назван не `AGENTS.md`: агенты, работающие в этом репозитории, читают `AGENTS.md` как инструкцию к
+разработке, а там потребительская. Меняется конфиг или нюанс подключения — правится и он, и README.
+
 ## Заметки проекта
 
 Хранилище Obsidian — `D:/Obsidian/quality-js/`: **роадмап — `roadmap.md`** (что осталось; на вопрос
