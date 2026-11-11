@@ -5,7 +5,7 @@
 доезжает до всех проектов обновлением версии пакета.
 
 > **Агенту:** сначала [`AGENT-GUIDE.md`](./AGENT-GUIDE.md) — что подключить, как и где ошибаются.
-> После установки он лежит в `node_modules/@pavelsiba/quality-js/AGENT-GUIDE.md`.
+> С версии 2.7.1 он лежит в `node_modules/@pavelsiba/quality-js/AGENT-GUIDE.md` (в 2.7.0 и ниже файла нет).
 
 ## Зачем
 
