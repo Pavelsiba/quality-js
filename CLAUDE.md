@@ -134,4 +134,4 @@ markdownlint (только в хуке: ни в зависимостях, ни �
   на пуше в `main` (`.releaserc.json`). `version` в `package.json` и теги руками не трогать; тип
   коммита определяет бамп: `feat` — минор, `fix` — патч, `feat!` / `BREAKING CHANGE` — мажор.
 - Коммиты — Conventional Commits, описание обязательно по-русски (правило `subject-russian`).
-- Пакет требует Node ≥ 22, Biome ≥ 2.6 (встроенные аналоги sonarjs появились там).
+- Пакет требует Node ≥ 24, Biome ≥ 2.6 (встроенные аналоги sonarjs появились там).
