@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.0.0](https://github.com/Pavelsiba/quality-js/compare/v2.9.0...v3.0.0) (2026-11-15)
+
+### ⚠ BREAKING CHANGES
+
+* **engines:** engines.node теперь >=24.0.0, Node 22 не поддерживается.
+
+### Новое
+
+* **engines:** минимальная версия Node поднята с 22 до 24 ([13335e3](https://github.com/Pavelsiba/quality-js/commit/13335e392163ed9b5c9308791364f78575c85a69)), closes [#19](https://github.com/Pavelsiba/quality-js/issues/19)
+
 ## [2.9.0](https://github.com/Pavelsiba/quality-js/compare/v2.8.0...v2.9.0) (2026-11-11)
 
 ### Новое
